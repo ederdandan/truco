@@ -1,0 +1,3073 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#2b170b" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="description" content="Truco Raiz & Arena — Truco Paulista e Mineiro PWA com stickers animados, provocações, Solo 1v1, Dupla 2v2, Trio 3v3 e Salas Online." />
+  <meta name="apple-mobile-web-app-title" content="Truco Raiz" />
+  <title>Truco Raiz &amp; Arena — PWA com Stickers Animados</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+  <style>
+    /* =========================================================================
+       1. DESIGN TOKENS — ESTÉTICA RÚSTICA SERTANEJA & 4 TEMAS INSTANTÂNEOS
+       ========================================================================= */
+    :root,
+    [data-theme="sertao"] {
+      --outer-leather: #231208;
+      --leather-stitch: #d97706;
+      --table-bg: radial-gradient(circle at 50% 35%, #693818 0%, #44220d 62%, #291306 100%);
+      --panel-bg: rgba(251, 244, 230, 0.97);
+      --panel-soft: rgba(236, 222, 198, 0.94);
+      --panel-border: #92400e;
+      --brass-accent: #d97706;
+      --text-main: #291408;
+      --text-muted: #6b442a;
+      --hud-text: #fef3c7;
+      --btn-primary-bg: linear-gradient(180deg, #d97706 0%, #9a3412 100%);
+      --btn-primary-txt: #fffbeb;
+      --card-surface: linear-gradient(168deg, #fffdf7 0%, #f2e5ce 100%);
+      --card-border: #b45309;
+      --card-back: repeating-linear-gradient(135deg, #7c2d12 0 6px, #451a03 6px 12px);
+      --suit-red: #dc2626;
+      --suit-black: #1c1917;
+      --font-display: Georgia, 'Palatino Linotype', 'Book Antiqua', serif;
+      --font-ui: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    [data-theme="boteco"] {
+      --outer-leather: #7f1d1d;
+      --leather-stitch: #ffffff;
+      --table-bg:
+        linear-gradient(90deg, rgba(220, 38, 38, 0.16) 50%, transparent 50%),
+        linear-gradient(rgba(220, 38, 38, 0.16) 50%, transparent 50%),
+        radial-gradient(circle at 50% 35%, #d6b286 0%, #b58958 68%, #8f6538 100%);
+      --panel-bg: rgba(255, 252, 245, 0.97);
+      --panel-soft: rgba(254, 226, 226, 0.72);
+      --panel-border: #b91c1c;
+      --brass-accent: #dc2626;
+      --text-main: #1f1712;
+      --text-muted: #5c493e;
+      --hud-text: #ffffff;
+      --btn-primary-bg: linear-gradient(180deg, #dc2626 0%, #991b1b 100%);
+      --btn-primary-txt: #ffffff;
+      --card-surface: linear-gradient(168deg, #ffffff 0%, #f8fafc 100%);
+      --card-border: #991b1b;
+      --card-back: repeating-linear-gradient(45deg, #dc2626 0 7px, #fef2f2 7px 14px);
+      --suit-red: #dc2626;
+      --suit-black: #0f172a;
+      --font-display: system-ui, -apple-system, sans-serif;
+      --font-ui: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    [data-theme="arena"] {
+      --outer-leather: #090d16;
+      --leather-stitch: #f59e0b;
+      --table-bg: radial-gradient(circle at 50% 25%, #3b1d0e 0%, #1c110b 55%, #09070a 100%);
+      --panel-bg: rgba(22, 18, 26, 0.96);
+      --panel-soft: rgba(42, 31, 45, 0.92);
+      --panel-border: #f59e0b;
+      --brass-accent: #fbbf24;
+      --text-main: #fef3c7;
+      --text-muted: #cbd5e1;
+      --hud-text: #fde68a;
+      --btn-primary-bg: linear-gradient(180deg, #f59e0b 0%, #ea580c 100%);
+      --btn-primary-txt: #180902;
+      --card-surface: linear-gradient(168deg, #fffdf7 0%, #f3e8d2 100%);
+      --card-border: #f59e0b;
+      --card-back: repeating-linear-gradient(135deg, #b45309 0 6px, #1e1b4b 6px 12px);
+      --suit-red: #e11d48;
+      --suit-black: #0f172a;
+      --font-display: Impact, 'Arial Black', system-ui, sans-serif;
+      --font-ui: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    [data-theme="fazenda"] {
+      --outer-leather: #362417;
+      --leather-stitch: #84cc16;
+      --table-bg: radial-gradient(circle at 50% 35%, #9c6644 0%, #7f5539 62%, #583823 100%);
+      --panel-bg: rgba(250, 245, 235, 0.97);
+      --panel-soft: rgba(230, 224, 206, 0.94);
+      --panel-border: #4d7c0f;
+      --brass-accent: #65a30d;
+      --text-main: #291d14;
+      --text-muted: #5c4b3c;
+      --hud-text: #f7fee7;
+      --btn-primary-bg: linear-gradient(180deg, #4d7c0f 0%, #365314 100%);
+      --btn-primary-txt: #f7fee7;
+      --card-surface: linear-gradient(168deg, #fffef9 0%, #ede6d3 100%);
+      --card-border: #4d7c0f;
+      --card-back: repeating-linear-gradient(135deg, #3f6212 0 6px, #713f12 6px 12px);
+      --suit-red: #dc2626;
+      --suit-black: #1c1917;
+      --font-display: Georgia, 'Times New Roman', serif;
+      --font-ui: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* =========================================================================
+       2. RESET & MOLDURA DE COURO COSTURADO COM REBITES DE LATÃO (100dvh)
+       ========================================================================= */
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      overscroll-behavior: none;
+      background: var(--outer-leather);
+      color: var(--text-main);
+      font-family: var(--font-ui);
+    }
+
+    .hidden { display: none !important; }
+    .font-serif-rustic { font-family: var(--font-display); font-weight: 900; letter-spacing: 0.02em; }
+    .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+
+    button, input {
+      touch-action: manipulation;
+      color: inherit;
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: transparent;
+    }
+
+    input[type="text"] {
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    /* Borda rústica costurada em couro com rebites nos 4 cantos */
+    .leather-frame {
+      width: 100%;
+      height: 100dvh;
+      padding: 6px;
+      background: var(--outer-leather);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stitched-arena {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      border: 2.5px dashed var(--leather-stitch);
+      background: var(--table-bg);
+      background-size: 36px 36px, 36px 36px, 100% 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: max(8px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom));
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 42px rgba(0, 0, 0, 0.52);
+    }
+
+    /* Rebites de latão dourado nos cantos da mesa */
+    .brass-rivet {
+      position: absolute;
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 35% 35%, #fef08a, #b45309);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.6);
+      z-index: 4;
+      pointer-events: none;
+    }
+    .rivet-tl { top: 8px; left: 8px; }
+    .rivet-tr { top: 8px; right: 8px; }
+    .rivet-bl { bottom: 8px; left: 8px; }
+    .rivet-br { bottom: 8px; right: 8px; }
+
+    /* Trepidação da tela ao gritar TRUCO / SEIS / NOVE / DOZE */
+    @keyframes arenaShake {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      15% { transform: translate(-6px, 4px) rotate(-0.8deg); }
+      30% { transform: translate(6px, -4px) rotate(0.8deg); }
+      45% { transform: translate(-5px, -3px) rotate(-0.5deg); }
+      60% { transform: translate(5px, 3px) rotate(0.5deg); }
+      75% { transform: translate(-3px, 2px) rotate(-0.3deg); }
+    }
+    .shake-impact {
+      animation: arenaShake 0.48s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    .rustic-card {
+      background: var(--panel-bg);
+      border: 2px solid var(--panel-border);
+      border-radius: 20px;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.42);
+    }
+
+    .soft-pill {
+      background: var(--panel-soft);
+      border: 1.5px solid rgba(146, 64, 14, 0.28);
+      border-radius: 13px;
+    }
+
+    .btn-rustic-cta {
+      background: var(--btn-primary-bg);
+      color: var(--btn-primary-txt);
+      font-weight: 900;
+      border-radius: 14px;
+      border: 1.5px solid rgba(255, 255, 255, 0.28);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+      transition: transform 0.08s ease;
+    }
+    .btn-rustic-cta:active { transform: scale(0.96); }
+    .btn-rustic-cta:disabled { opacity: 0.42; pointer-events: none; }
+
+    .hud-chip {
+      background: rgba(18, 9, 4, 0.72);
+      color: var(--hud-text);
+      border: 1.5px solid rgba(251, 191, 36, 0.35);
+      border-radius: 12px;
+      backdrop-filter: blur(4px);
+    }
+
+    /* =========================================================================
+       3. TELA 1: LOBBY EM 3 ABAS (MESA, PERFIL & TEMAS, SALA ONLINE)
+       ========================================================================= */
+    .shell-width {
+      width: 100%;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .main-card {
+      width: 100%;
+      max-width: 560px;
+      margin: auto;
+      max-height: 83dvh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .profile-banner {
+      padding: 10px 14px;
+      border-bottom: 1.5px solid rgba(146, 64, 14, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .avatar-ring {
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 2.5px solid var(--panel-border);
+      background: var(--panel-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+      font-size: 23px;
+    }
+
+    .avatar-ring img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .nav-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      padding: 4px;
+      margin: 10px 12px 0;
+      flex-shrink: 0;
+    }
+
+    .nav-tab-btn {
+      padding: 8px 4px;
+      border-radius: 10px;
+      font-size: 11.5px;
+      font-weight: 900;
+    }
+
+    .tab-scroll {
+      padding: 12px 14px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    .tab-scroll::-webkit-scrollbar { width: 4px; }
+    .tab-scroll::-webkit-scrollbar-thumb { background: rgba(146, 64, 14, 0.35); border-radius: 999px; }
+
+    .lbl-micro {
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+
+    .choice-btn {
+      padding: 8px 6px;
+      text-align: center;
+      transition: transform 0.08s ease, border-color 0.12s ease;
+    }
+    .choice-btn:active { transform: scale(0.95); }
+
+    .card-footer {
+      padding: 10px 14px;
+      border-top: 1.5px solid rgba(146, 64, 14, 0.25);
+      flex-shrink: 0;
+    }
+
+    /* =========================================================================
+       4. TELA 2: ARENA DE TRUCO (PLACAR TENTOS, VIRA, VAZAS, STICKERS & MÃO)
+       ========================================================================= */
+    .scoreboard-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 14px;
+      background: rgba(15, 8, 3, 0.82);
+      border: 1.5px solid rgba(251, 191, 36, 0.45);
+      color: #fef3c7;
+      flex-shrink: 0;
+    }
+
+    .vaza-dots {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+
+    .vaza-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      border: 1.5px solid rgba(255,255,255,0.45);
+      background: rgba(255,255,255,0.12);
+    }
+    .vaza-dot.win-us { background: #22c55e; border-color: #86efac; }
+    .vaza-dot.win-them { background: #ef4444; border-color: #fca5a5; }
+    .vaza-dot.win-tie { background: #f59e0b; border-color: #fde047; }
+
+    /* Assentos dos outros jogadores */
+    .opponents-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(108px, 1fr));
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .seat-pill {
+      padding: 5px 8px;
+      border-radius: 12px;
+      background: rgba(20, 11, 5, 0.78);
+      border: 1.5px solid rgba(255, 255, 255, 0.16);
+      color: #fef3c7;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      font-size: 11px;
+      position: relative;
+    }
+
+    .seat-pill.turn-active {
+      border-color: #fbbf24;
+      box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.35);
+    }
+
+    /* Centro da Arena: Monte + Vira + Cartas Jogadas na Vaza */
+    .arena-center {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+    }
+
+    .vira-deck-corner {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 8px;
+      border-radius: 12px;
+      background: rgba(18, 9, 4, 0.78);
+      border: 1.5px solid rgba(251, 191, 36, 0.38);
+      color: #fef3c7;
+      z-index: 3;
+    }
+
+    .mini-vira-card {
+      width: 34px;
+      height: 46px;
+      border-radius: 7px;
+      background: var(--card-surface);
+      border: 1.5px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 12px;
+      line-height: 1.05;
+    }
+
+    @keyframes slamCardOnTable {
+      0% { opacity: 0; transform: scale(1.45) translateY(-28px) rotate(-14deg); }
+      70% { opacity: 1; transform: scale(0.96) translateY(2px) rotate(2deg); }
+      100% { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); }
+    }
+
+    .played-cards-ring {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 112px;
+      padding: 6px;
+    }
+
+    .table-played-slot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      animation: slamCardOnTable 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .truco-table-card {
+      width: 68px;
+      height: 96px;
+      border-radius: 12px;
+      background: var(--card-surface);
+      border: 2.5px solid var(--card-border);
+      padding: 5px 6px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.45);
+      position: relative;
+    }
+
+    .truco-table-card.face-down {
+      background: var(--card-back);
+      border-color: #fbbf24;
+      align-items: center;
+      justify-content: center;
+      color: #fde68a;
+    }
+
+    .truco-table-card.is-manilha {
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 2.5px #fbbf24, 0 12px 24px rgba(245, 158, 11, 0.45);
+    }
+
+    .manilha-crown-tag {
+      position: absolute;
+      top: -8px;
+      right: -6px;
+      background: linear-gradient(135deg, #f59e0b, #b45309);
+      color: #ffffff;
+      font-size: 8.5px;
+      font-weight: 900;
+      padding: 2px 5px;
+      border-radius: 999px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+
+    /* =========================================================================
+       5. EXPLOSÃO DE STICKERS ANIMADOS (AO TRUCAR & PROVOCAÇÃO LIVRE 😜)
+       ========================================================================= */
+    @keyframes stickerBoomIn {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.18) rotate(-22deg); }
+      45% { opacity: 1; transform: translate(-50%, -50%) scale(1.16) rotate(5deg); }
+      70% { opacity: 1; transform: translate(-50%, -50%) scale(0.95) rotate(-3deg); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+    }
+
+    @keyframes stickerRingWave {
+      0% { transform: scale(0.4); opacity: 0.95; }
+      100% { transform: scale(2.3); opacity: 0; }
+    }
+
+    .truco-sticker-explosion {
+      position: fixed;
+      top: 42%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 48;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      animation: stickerBoomIn 0.46s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+    }
+
+    .sticker-shockwave {
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      border-radius: 999px;
+      border: 5px solid #fbbf24;
+      animation: stickerRingWave 0.75s ease-out forwards;
+      pointer-events: none;
+    }
+
+    .sticker-badge-card {
+      background: radial-gradient(circle at 30% 25%, #fef08a 0%, #f59e0b 52%, #b91c1c 100%);
+      border: 4px solid #ffffff;
+      border-radius: 28px;
+      padding: 14px 22px;
+      box-shadow: 0 22px 48px rgba(0, 0, 0, 0.68), 0 0 0 4px #7c2d12;
+      color: #ffffff;
+      transform: rotate(-3deg);
+    }
+
+    @keyframes tauntFlyUp {
+      0% { opacity: 0; transform: translate(-50%, 30px) scale(0.45) rotate(-12deg); }
+      18% { opacity: 1; transform: translate(-50%, 0) scale(1.08) rotate(3deg); }
+      82% { opacity: 1; transform: translate(-50%, -8px) scale(1) rotate(-2deg); }
+      100% { opacity: 0; transform: translate(-50%, -34px) scale(0.85) rotate(4deg); }
+    }
+
+    .floating-taunt-sticker {
+      position: fixed;
+      top: 34%;
+      left: 50%;
+      z-index: 44;
+      pointer-events: none;
+      background: linear-gradient(145deg, #fffbeb 0%, #fde68a 100%);
+      border: 3.5px solid #b45309;
+      border-radius: 24px;
+      padding: 10px 18px;
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.55);
+      text-align: center;
+      color: #291408;
+      animation: tauntFlyUp 2.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    /* Painel de Resposta ao Pedido de Truco / Seis / Nove / Doze */
+    .truco-response-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 46;
+      background: rgba(12, 6, 2, 0.76);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 16px 14px max(22px, env(safe-area-inset-bottom));
+    }
+
+    /* =========================================================================
+       6. MÃO DO JOGADOR LOCAL, BOTÃO TRUCO E BANDEJA DE STICKERS (😜)
+       ========================================================================= */
+    .local-dock {
+      padding: 9px 11px 10px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      z-index: 20;
+    }
+
+    .local-hand-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 106px;
+      touch-action: none;
+    }
+
+    .my-truco-card {
+      width: 74px;
+      height: 104px;
+      border-radius: 14px;
+      background: var(--card-surface);
+      border: 2.5px solid var(--card-border);
+      padding: 6px 7px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      touch-action: none;
+    }
+
+    .my-truco-card:active {
+      transform: translateY(-10px) scale(1.05);
+    }
+
+    .my-truco-card.is-manilha {
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 2.5px #fbbf24, 0 10px 22px rgba(245, 158, 11, 0.42);
+    }
+
+    .my-truco-card.blind-iron-hand {
+      background: var(--card-back);
+      border-color: #fbbf24;
+      color: #fde68a;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .action-buttons-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.9fr auto;
+      gap: 7px;
+      align-items: center;
+    }
+
+    @keyframes trucoButtonPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+
+    .btn-truco-shout {
+      padding: 12px 10px;
+      font-size: 13.5px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+      color: #ffffff;
+      border: 2px solid #fbbf24;
+      box-shadow: 0 6px 18px rgba(220, 38, 38, 0.45);
+      animation: trucoButtonPulse 1.4s infinite ease-in-out;
+    }
+    .btn-truco-shout:disabled {
+      opacity: 0.4;
+      animation: none;
+      pointer-events: none;
+    }
+
+    .btn-sticker-trigger {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #fbbf24, #d97706);
+      border: 2px solid #78350f;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 5px 14px rgba(0, 0, 0, 0.32);
+      transition: transform 0.08s ease;
+    }
+    .btn-sticker-trigger:active { transform: scale(0.92); }
+
+    /* Gaveta de 10 Stickers Provocativos */
+    .sticker-drawer {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      right: 0;
+      left: 0;
+      padding: 10px;
+      z-index: 35;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+
+    .sticker-pick-btn {
+      padding: 7px 9px;
+      border-radius: 11px;
+      background: var(--panel-soft);
+      border: 1.5px solid var(--panel-border);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      font-weight: 900;
+      text-align: left;
+      transition: transform 0.08s ease;
+    }
+    .sticker-pick-btn:active { transform: scale(0.95); }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: rgba(12, 6, 2, 0.82);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 440px;
+      padding: 18px;
+      max-height: 88dvh;
+      overflow-y: auto;
+    }
+
+    /* =========================================================================
+       7. USABILIDADE: ALVOS DE TOQUE, DESTAQUE DA VEZ, VAZA VENCEDORA & AVISOS
+       ========================================================================= */
+    button.hud-chip { min-width: 38px; min-height: 36px; }
+    .lbl-micro { font-size: 11px; }
+    .nav-tab-btn { font-size: 12.5px; padding: 10px 4px; }
+    button:focus-visible, [role="button"]:focus-visible {
+      outline: 3px solid #fbbf24;
+      outline-offset: 2px;
+    }
+
+    .local-dock.my-turn {
+      border-color: #fbbf24;
+      box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.55), 0 14px 34px rgba(0, 0, 0, 0.42);
+    }
+
+    .my-truco-card.waiting { opacity: 0.72; filter: saturate(0.75); }
+    @media (hover: hover) {
+      .my-truco-card.playable:hover { transform: translateY(-8px); box-shadow: 0 14px 24px rgba(0,0,0,0.35); }
+    }
+
+    .truco-table-card.vaza-winner {
+      box-shadow: 0 0 0 4px #22c55e, 0 14px 28px rgba(34, 197, 94, 0.5);
+      transform: scale(1.08);
+      transition: transform 0.2s ease;
+    }
+    .table-played-slot.vaza-loser { opacity: 0.55; }
+
+    @keyframes bannerFlash {
+      0%, 100% { transform: scale(1); }
+      30% { transform: scale(1.08); background: rgba(185, 28, 28, 0.9); }
+    }
+    .turn-banner-flash { animation: bannerFlash 0.6s ease; }
+
+    #turn-banner.my-turn-banner {
+      background: linear-gradient(180deg, #16a34a, #15803d);
+      color: #ffffff;
+      border-color: #fbbf24;
+    }
+
+    .seat-avatar {
+      width: 22px; height: 22px; border-radius: 999px; overflow: hidden;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.12); font-size: 13px; flex-shrink: 0;
+    }
+    .seat-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .how-to-list { margin: 4px 0 0; padding-left: 18px; }
+    .how-to-list li { margin-bottom: 3px; }
+  </style>
+</head>
+<body data-theme="sertao">
+
+  <div class="leather-frame">
+    <div id="stitched-arena" class="stitched-arena">
+      <span class="brass-rivet rivet-tl"></span>
+      <span class="brass-rivet rivet-tr"></span>
+      <span class="brass-rivet rivet-bl"></span>
+      <span class="brass-rivet rivet-br"></span>
+
+      <!-- =====================================================================
+           TELA 1: LOBBY EM 3 ABAS (MESA, PERFIL & TEMAS, SALA ONLINE)
+           ===================================================================== -->
+      <div id="lobby-screen" style="width:100%; height:100%; display:flex; flex-direction:column; justify-content:space-between;">
+        <header class="shell-width top-bar">
+          <div style="display:flex; align-items:center; gap:9px;">
+            <img src="icon.svg" alt="" width="42" height="42" style="width:42px; height:42px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.38); flex-shrink:0;" />
+            <div>
+              <h1 class="font-serif-rustic" style="margin:0; font-size:16px; color:var(--hud-text); line-height:1.1;">Truco Raiz &amp; Arena</h1>
+              <span style="font-size:10px; color:var(--hud-text); opacity:0.86;">Paulista &amp; Mineiro • Stickers Animados • 1v1, 2v2, 3v3 &amp; Salas</span>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:6px;">
+            <button type="button" id="btn-cycle-theme" class="hud-chip" style="padding:7px 10px; font-size:12px; font-weight:900;" title="Mudar Tema">🎨</button>
+            <button type="button" id="btn-mute" class="hud-chip" style="padding:7px 10px; font-size:13px; font-weight:900;" title="Som">🔊</button>
+            <button type="button" id="btn-help" class="hud-chip" style="padding:7px 10px; font-size:12px; font-weight:900;" title="Regras do Truco">?</button>
+          </div>
+        </header>
+
+        <main class="rustic-card main-card">
+          <!-- Banner de Perfil -->
+          <div class="profile-banner">
+            <div style="display:flex; align-items:center; gap:10px; min-width:0;">
+              <div id="lobby-avatar-ring" class="avatar-ring">🤠</div>
+              <div style="min-width:0;">
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <span id="lobby-player-name" class="font-serif-rustic" style="font-size:14.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Violeiro</span>
+                  <span id="lobby-wins-badge" style="font-size:10px; padding:2px 7px; border-radius:999px; background:rgba(217,119,6,0.16); color:var(--brass-accent); font-weight:900;">🏆 0 quedas</span>
+                </div>
+                <div id="lobby-match-summary" style="font-size:11px; color:var(--text-muted); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                  🤝 Dupla 2v2 · Truco Paulista · Bots Médio
+                </div>
+              </div>
+            </div>
+            <button type="button" id="btn-edit-profile-shortcut" class="soft-pill" style="padding:7px 10px; font-size:11px; font-weight:900; flex-shrink:0;">
+              🎨 Temas
+            </button>
+          </div>
+
+          <!-- 3 Abas Limpas -->
+          <nav class="soft-pill nav-tabs" role="tablist">
+            <button type="button" data-tab="play" class="nav-tab-btn">🃏 Mesa</button>
+            <button type="button" data-tab="profile" class="nav-tab-btn">👤 Perfil &amp; Temas</button>
+            <button type="button" data-tab="room" class="nav-tab-btn">🌐 Sala Online</button>
+          </nav>
+
+          <div class="tab-scroll">
+
+            <!-- ABA 1: 🃏 MESA -->
+            <section id="panel-play" style="display:flex; flex-direction:column; gap:11px;">
+              <div>
+                <span class="lbl-micro">Formato da Partida</span>
+                <div class="grid-3">
+                  <button type="button" data-mode="1v1" class="soft-pill choice-btn">
+                    <div style="font-size:16px;">🤠</div>
+                    <div style="font-size:11px; font-weight:900; margin-top:2px;">Solo 1v1</div>
+                    <div style="font-size:9px; color:var(--text-muted);">Mano a mano</div>
+                  </button>
+                  <button type="button" data-mode="2v2" class="soft-pill choice-btn">
+                    <div style="font-size:16px;">🤝</div>
+                    <div style="font-size:11px; font-weight:900; margin-top:2px;">Dupla 2v2</div>
+                    <div style="font-size:9px; color:var(--text-muted);">Parceiro na frente</div>
+                  </button>
+                  <button type="button" data-mode="3v3" class="soft-pill choice-btn">
+                    <div style="font-size:16px;">🔥</div>
+                    <div style="font-size:11px; font-weight:900; margin-top:2px;">Trio 3v3</div>
+                    <div style="font-size:9px; color:var(--text-muted);">6 na arena</div>
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <span class="lbl-micro">Estilo de Truco</span>
+                <div class="grid-2">
+                  <button type="button" data-variant="paulista" class="soft-pill choice-btn" style="text-align:left; padding:9px 11px;">
+                    <div style="font-size:12px; font-weight:900;">⚡ Truco Paulista</div>
+                    <div style="font-size:9.5px; color:var(--text-muted);">Manilha pela Vira • 1 &rarr; 3 &rarr; 6 &rarr; 9 &rarr; 12</div>
+                  </button>
+                  <button type="button" data-variant="mineiro" class="soft-pill choice-btn" style="text-align:left; padding:9px 11px;">
+                    <div style="font-size:12px; font-weight:900;">⛰️ Truco Mineiro</div>
+                    <div style="font-size:9.5px; color:var(--text-muted);">Manilha fixa • 2 &rarr; 4 &rarr; 6 &rarr; 10 &rarr; 12</div>
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <span class="lbl-micro">Nível de Blefe dos Bots</span>
+                <div class="grid-3">
+                  <button type="button" data-diff="easy" class="soft-pill choice-btn"><strong style="font-size:11px;">Fácil</strong></button>
+                  <button type="button" data-diff="medium" class="soft-pill choice-btn"><strong style="font-size:11px;">Médio</strong></button>
+                  <button type="button" data-diff="hard" class="soft-pill choice-btn"><strong style="font-size:11px;">Mestre</strong></button>
+                </div>
+              </div>
+
+              <button type="button" id="btn-howto" class="soft-pill" style="padding:10px 12px; display:flex; align-items:center; justify-content:space-between; gap:8px; text-align:left; width:100%;">
+                <div>
+                  <div style="font-size:12.5px; font-weight:900;">📖 Primeira vez? Veja como jogar</div>
+                  <div style="font-size:10.5px; color:var(--text-muted);">Regras explicadas em 1 minuto, sem complicação</div>
+                </div>
+                <span style="font-size:16px; font-weight:900; color:var(--brass-accent);">›</span>
+              </button>
+            </section>
+
+            <!-- ABA 2: 👤 PERFIL & TEMAS -->
+            <section id="panel-profile" class="hidden" style="display:flex; flex-direction:column; gap:11px;">
+              <div>
+                <span class="lbl-micro">Tema Visual da Arena</span>
+                <div class="grid-2">
+                  <button type="button" data-set-theme="sertao" class="soft-pill choice-btn" style="text-align:left; padding:9px 11px;">
+                    <div style="font-size:12px; font-weight:900;">🤠 Sertão &amp; Viola</div>
+                    <div style="font-size:10px; color:var(--text-muted);">Madeira imbuia &amp; couro</div>
+                  </button>
+                  <button type="button" data-set-theme="boteco" class="soft-pill choice-btn" style="text-align:left; padding:9px 11px;">
+                    <div style="font-size:12px; font-weight:900;">🍻 Boteco da Esquina</div>
+                    <div style="font-size:10px; color:var(--text-muted);">Toalha xadrez vermelha</div>
+                  </button>
+                  <button type="button" data-set-theme="arena" class="soft-pill choice-btn" style="text-align:left; padding:9px 11px;">
+                    <div style="font-size:12px; font-weight:900;">🔥 Arena Rodeio Noturno</div>
+                    <div style="font-size:10px; color:var(--text-muted);">Holofotes âmbar &amp; fogo</div>
+                  </button>
+                  <button type="button" data-set-theme="fazenda" class="soft-pill choice-btn" style="text-align:left; padding:9px 11px;">
+                    <div style="font-size:12px; font-weight:900;">🌵 Fazenda &amp; Café</div>
+                    <div style="font-size:10px; color:var(--text-muted);">Terracota &amp; palha rústica</div>
+                  </button>
+                </div>
+              </div>
+
+              <div class="soft-pill" style="padding:10px 12px; display:flex; align-items:center; gap:11px;">
+                <div id="profile-preview-ring" class="avatar-ring" style="width:58px; height:58px; font-size:28px;">🤠</div>
+                <div style="flex:1; min-width:0;">
+                  <span class="lbl-micro" style="margin-bottom:3px;">Seu Apelido na Mesa</span>
+                  <input id="input-profile-name" type="text" maxlength="14" placeholder="Ex: Tião, Zé, Ana..." style="width:100%; background:rgba(255,255,255,0.45); border:1.5px solid var(--panel-border); border-radius:10px; padding:6px 10px; font-size:13px; font-weight:900; outline:none;" />
+                  <div style="display:flex; gap:6px; margin-top:7px;">
+                    <label class="soft-pill" style="padding:5px 9px; font-size:10.5px; font-weight:900; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                      <span>📷 Foto / Câmera</span>
+                      <input id="input-photo-file" type="file" accept="image/*" style="display:none;" />
+                    </label>
+                    <button type="button" id="btn-clear-photo" class="soft-pill hidden" style="padding:5px 8px; font-size:10.5px; font-weight:900;">Remover</button>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <span class="lbl-micro">Avatar Sertanejo / Brasileiro</span>
+                <div id="avatar-picker-grid" class="grid-4"></div>
+              </div>
+            </section>
+
+            <!-- ABA 3: 🌐 SALA ONLINE (P2P + QR CODE + LINK) -->
+            <section id="panel-room" class="hidden" style="display:flex; flex-direction:column; gap:10px;">
+              <div class="soft-pill" style="padding:11px 12px; display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                <div>
+                  <span class="lbl-micro" style="margin:0;">Código da Arena</span>
+                  <span id="room-code-display" class="font-mono" style="font-size:20px; font-weight:900; letter-spacing:0.16em; color:var(--brass-accent);">TRCO</span>
+                </div>
+                <div style="display:flex; gap:6px;">
+                  <button type="button" id="btn-toggle-qr" class="rustic-card" style="padding:8px 11px; border-radius:12px; font-size:11px; font-weight:900;">QR Code</button>
+                  <button type="button" id="btn-share-link" class="rustic-card" style="padding:8px 11px; border-radius:12px; font-size:11px; font-weight:900;">
+                    <span id="share-link-lbl">🔗 Chamar</span>
+                  </button>
+                </div>
+              </div>
+
+              <div id="room-qr-box" class="soft-pill hidden" style="padding:12px; display:flex; flex-direction:column; align-items:center; gap:6px;">
+                <div id="room-qr-svg" style="background:#ffffff; padding:10px; border-radius:14px; border:2px solid var(--panel-border);"></div>
+                <span style="font-size:11px; color:var(--text-muted);">Escaneie pelo celular para entrar na mesa de Truco</span>
+              </div>
+
+              <div class="soft-pill" style="padding:10px 12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                  <span class="lbl-micro" style="margin:0;">Jogadores na Sala</span>
+                  <span id="room-members-count" style="font-size:11px; font-weight:900; color:var(--brass-accent);">1 conectado</span>
+                </div>
+                <div id="room-members-list" style="display:flex; flex-direction:column; gap:6px;"></div>
+              </div>
+
+              <div class="soft-pill" style="padding:10px 12px; display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                <span style="font-size:12px; font-weight:900;">Entrar em sala:</span>
+                <div style="display:flex; gap:6px;">
+                  <input id="input-room-join" type="text" maxlength="4" placeholder="CÓD." class="rustic-card font-mono" style="width:72px; padding:7px; border-radius:10px; font-size:12px; font-weight:900; text-transform:uppercase; text-align:center; outline:none;" />
+                  <button type="button" id="btn-room-join" class="btn-rustic-cta" style="padding:7px 14px; font-size:11px; text-transform:uppercase;">Entrar</button>
+                </div>
+              </div>
+            </section>
+
+          </div>
+
+          <div class="card-footer">
+            <button type="button" id="btn-start-match" class="btn-rustic-cta" style="width:100%; padding:14px; font-size:15px; letter-spacing:0.04em; text-transform:uppercase; display:flex; align-items:center; justify-content:center; gap:8px;">
+              <span>🃏</span>
+              <span>EMBARALHAR E DAR CARTAS</span>
+            </button>
+          </div>
+        </main>
+
+        <footer class="shell-width" style="text-align:center; font-size:10px; color:var(--hud-text); opacity:0.88;">
+          Grite TRUCO para explodir stickers na mesa • Use o botão 😜 a qualquer hora para provocar!
+        </footer>
+      </div>
+
+      <!-- =====================================================================
+           TELA 2: ARENA DE TRUCO EM ANDAMENTO
+           ===================================================================== -->
+      <div id="game-screen" class="hidden" style="width:100%; height:100%; display:flex; flex-direction:column; justify-content:space-between; gap:5px;">
+        <header class="shell-width top-bar">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span id="game-variant-badge" class="hud-chip" style="padding:5px 9px; font-size:10.5px; font-weight:900;">⚡ Paulista</span>
+            <span id="game-stake-badge" class="hud-chip" style="padding:5px 9px; font-size:11px; font-weight:900; color:#fbbf24;">Valendo 1 pt</span>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:5px;">
+            <button type="button" id="btn-game-theme" class="hud-chip" style="padding:6px 10px; font-size:12px; font-weight:900;" title="Trocar Tema">🎨</button>
+            <button type="button" id="btn-game-mute" class="hud-chip" style="padding:6px 10px; font-size:12px; font-weight:900;" title="Som">🔊</button>
+            <button type="button" id="btn-game-help" class="hud-chip" style="padding:6px 10px; font-size:12px; font-weight:900;" title="Regras">?</button>
+            <button type="button" id="btn-game-exit" class="hud-chip" style="padding:6px 10px; font-size:12px; font-weight:900;" title="Sair da partida">✕</button>
+          </div>
+        </header>
+
+        <!-- Placar de Tentos (12 Pontos) + Bolinhas das 3 Vazas -->
+        <div class="shell-width scoreboard-bar">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="font-size:11px; font-weight:900; color:#86efac;">NÓS</span>
+            <span id="score-us-num" class="font-serif-rustic" style="font-size:20px; color:#ffffff;">0</span>
+          </div>
+
+          <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
+            <span style="font-size:9px; font-weight:900; opacity:0.8; letter-spacing:0.06em;">MELHOR DE 3 VAZAS</span>
+            <div id="vaza-dots-row" class="vaza-dots">
+              <span class="vaza-dot"></span>
+              <span class="vaza-dot"></span>
+              <span class="vaza-dot"></span>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span id="score-them-num" class="font-serif-rustic" style="font-size:20px; color:#ffffff;">0</span>
+            <span style="font-size:11px; font-weight:900; color:#fca5a5;">ELES</span>
+          </div>
+        </div>
+
+        <!-- Assentos dos Outros Jogadores -->
+        <section id="opponents-row" class="shell-width opponents-row"></section>
+
+        <!-- Centro da Arena: Vira/Manilha + Cartas Jogadas -->
+        <main class="shell-width arena-center">
+          <div id="vira-box" class="vira-deck-corner">
+            <div id="vira-card-mini" class="mini-vira-card">7♦</div>
+            <div style="font-size:9.5px; line-height:1.2;">
+              <div style="opacity:0.75; font-weight:800;">VIRA</div>
+              <div id="manilha-rank-lbl" style="font-weight:900; color:#fbbf24;">Manilha: Q</div>
+            </div>
+          </div>
+
+          <div id="turn-banner" class="hud-chip" style="padding:5px 13px; font-size:11.5px; font-weight:900; text-align:center; margin-top:46px;">
+            Sua vez! Toque ou arraste uma carta para cima.
+          </div>
+
+          <div id="played-cards-ring" class="played-cards-ring"></div>
+        </main>
+
+        <!-- Slot de Stickers Animados (Explosão de Truco & Provocações) -->
+        <div id="sticker-fx-layer"></div>
+
+        <!-- Painel da Mão Local + Botão TRUCO + Botão Stickers (😜) -->
+        <section class="shell-width rustic-card local-dock">
+          <!-- Gaveta Rápida de 10 Stickers Provocativos -->
+          <div id="sticker-drawer" class="rustic-card sticker-drawer hidden"></div>
+
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+            <div style="display:flex; align-items:center; gap:7px; min-width:0;">
+              <div id="local-seat-avatar" class="avatar-ring" style="width:28px; height:28px; font-size:14px; border-width:2px;">🤠</div>
+              <div style="min-width:0;">
+                <span id="local-seat-name" class="font-serif-rustic" style="font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Você</span>
+                <div id="local-hand-sub" style="font-size:9.5px; color:var(--text-muted);">Toque ou arraste para cima para jogar</div>
+              </div>
+            </div>
+
+            <span id="partner-peek-badge" class="hidden" style="font-size:10px; font-weight:900; padding:3px 8px; border-radius:999px; background:rgba(217,119,6,0.18); color:var(--brass-accent);">
+              🤝 Mão de 11!
+            </span>
+          </div>
+
+          <!-- Cartas do Parceiro na Mão de 11 (quando aplicável) -->
+          <div id="partner-eleven-strip" class="hidden" style="display:flex; justify-content:center; gap:6px; padding:4px; border-radius:10px; background:rgba(217,119,6,0.12); font-size:11px; font-weight:900;"></div>
+
+          <!-- Suas 3 Cartas -->
+          <div id="local-hand-row" class="local-hand-row"></div>
+
+          <!-- Barra de Ação: TRUCO + Jogar Coberta + Botão Sticker 😜 -->
+          <div class="action-buttons-grid">
+            <button type="button" id="btn-call-truco" class="btn-truco-shout">
+              🔥 TRUCO!
+            </button>
+
+            <button type="button" id="btn-toggle-blind" class="soft-pill" style="padding:11px 8px; font-size:11px; font-weight:900;" title="Joga a próxima carta virada para baixo (vale zero). Só a partir da 2ª vaza." disabled>
+              🙈 Coberta
+            </button>
+
+            <button type="button" id="btn-open-stickers" class="btn-sticker-trigger" title="Provocar com Stickers">
+              😜
+            </button>
+          </div>
+        </section>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       OVERLAY DE RESPOSTA AO PEDIDO DE TRUCO / SEIS / NOVE / DOZE
+       ========================================================================= -->
+  <div id="truco-response-overlay" class="truco-response-overlay hidden">
+    <div class="rustic-card" style="width:100%; max-width:420px; padding:16px; text-align:center; display:flex; flex-direction:column; gap:11px;">
+      <div>
+        <span style="font-size:10px; font-weight:900; text-transform:uppercase; color:var(--brass-accent);">Desafio na Mesa!</span>
+        <h3 id="response-title" class="font-serif-rustic" style="margin:4px 0; font-size:20px;">Pediram TRUCO (Valendo 3)!</h3>
+        <p id="response-sub" style="margin:0; font-size:11.5px; color:var(--text-muted);">O que você vai fazer?</p>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+        <button type="button" id="btn-resp-accept" class="btn-rustic-cta" style="padding:13px 8px; font-size:13px; background:linear-gradient(180deg,#16a34a,#15803d);">
+          ✅ ACEITAR!
+        </button>
+        <button type="button" id="btn-resp-raise" class="btn-rustic-cta" style="padding:13px 8px; font-size:13px; background:linear-gradient(180deg,#dc2626,#991b1b);">
+          🔥 PEDIR SEIS!
+        </button>
+      </div>
+
+      <button type="button" id="btn-resp-fold" class="soft-pill" style="width:100%; padding:10px; font-size:12px; font-weight:900; color:#b91c1c;">
+        🏳️ CORRER (Entregar os pontos)
+      </button>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       OVERLAY DA MÃO DE 11 (TIME COM 11 DECIDE SE JOGA OU CORRE)
+       ========================================================================= -->
+  <div id="eleven-overlay" class="truco-response-overlay hidden">
+    <div class="rustic-card" style="width:100%; max-width:420px; padding:16px; text-align:center; display:flex; flex-direction:column; gap:11px;">
+      <div>
+        <span style="font-size:10px; font-weight:900; text-transform:uppercase; color:var(--brass-accent);">Mão de 11!</span>
+        <h3 class="font-serif-rustic" style="margin:4px 0; font-size:20px;">Vocês estão com 11 tentos</h3>
+        <p id="eleven-sub" style="margin:0; font-size:12px; color:var(--text-muted);">Olhe as cartas e decida: jogar ou correr?</p>
+      </div>
+      <div id="eleven-cards" style="display:flex; flex-direction:column; gap:6px; font-size:13px; font-weight:900;"></div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+        <button type="button" id="btn-eleven-play" class="btn-rustic-cta" style="padding:13px 8px; font-size:13px; background:linear-gradient(180deg,#16a34a,#15803d);">✅ JOGAR</button>
+        <button type="button" id="btn-eleven-run" class="btn-rustic-cta" style="padding:13px 8px; font-size:13px; background:linear-gradient(180deg,#78716c,#44403c);">🏳️ CORRER</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 1: REGRAS & HIERARQUIA DO TRUCO
+       ========================================================================= -->
+  <div id="modal-rules" class="modal-overlay hidden">
+    <div class="rustic-card modal-box" style="display:flex; flex-direction:column; gap:11px;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 class="font-serif-rustic" style="margin:0; font-size:18px;">Regras do Truco Raiz</h3>
+        <button type="button" id="btn-close-rules" class="soft-pill" style="width:32px; height:32px; border-radius:999px; font-weight:900;">✕</button>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px; font-size:12.5px; line-height:1.45;">
+        <div class="soft-pill" style="padding:9px 11px;">
+          <strong style="color:var(--brass-accent);">🃏 Como jogar (resumo rápido):</strong>
+          <ol class="how-to-list">
+            <li>Cada um recebe <strong>3 cartas</strong>. Quem joga a carta mais forte leva a <strong>vaza</strong>.</li>
+            <li>Quem ganhar <strong>2 de 3 vazas</strong> leva a mão e marca os pontos (tentos).</li>
+            <li>Quando o painel verde mostrar <strong>SUA VEZ</strong>, toque numa carta (ou arraste para cima) para jogar.</li>
+            <li>Acha que sua mão é boa? Aperte <strong>🔥 TRUCO</strong> para a mão valer mais. O rival pode <em>aceitar</em>, <em>aumentar</em> ou <em>correr</em>.</li>
+            <li>Se você <strong>correr</strong>, o outro time ganha o que a mão valia antes do pedido.</li>
+            <li>Ganha quem chegar a <strong>12 tentos</strong> primeiro.</li>
+          </ol>
+        </div>
+        <div class="soft-pill" style="padding:9px 11px;">
+          <strong style="color:var(--brass-accent);">🎯 Situações especiais:</strong>
+          <div>• <strong>Empate na vaza (cangou):</strong> vale quem ganhar a próxima. Se a 1ª vaza foi sua e outra empatar, a mão é sua.</div>
+          <div>• <strong>🙈 Coberta:</strong> a partir da 2ª vaza você pode jogar uma carta virada; ela vale zero (bom pra esconder jogo).</div>
+          <div>• <strong>Mão de 11:</strong> o time com 11 vê as cartas do parceiro e decide se joga (valendo 3) ou corre (o rival ganha 1). Ninguém pode pedir truco.</div>
+          <div>• <strong>Mão de ferro (11 a 11):</strong> todos jogam sem ver as próprias cartas. Quem ganhar a mão leva a queda!</div>
+        </div>
+        <div class="soft-pill" style="padding:9px 11px;">
+          <strong style="color:var(--brass-accent);">⚡ Ordem de Força das Cartas:</strong>
+          <div><strong>Manilhas:</strong> ♣ Zap (Paus) &gt; ♥ Copas &gt; ♠ Espadilha &gt; ♦ Ouros.</div>
+          <div><strong>Cartas Comuns:</strong> 3 &gt; 2 &gt; A &gt; K &gt; J &gt; Q &gt; 7 &gt; 6 &gt; 5 &gt; 4.</div>
+        </div>
+        <div class="soft-pill" style="padding:9px 11px;">
+          <strong style="color:var(--brass-accent);">🤠 Paulista vs. ⛰️ Mineiro:</strong>
+          <div>• <strong>Paulista:</strong> A Manilha é a carta seguinte à <strong>Vira</strong>. Queda vale <code>1 &rarr; 3 &rarr; 6 &rarr; 9 &rarr; 12</code>.</div>
+          <div>• <strong>Mineiro:</strong> Manilhas fixas (<code>4♣ &gt; 7♥ &gt; A♠ &gt; 7♦</code>). Queda vale <code>2 &rarr; 4 &rarr; 6 &rarr; 10 &rarr; 12</code>.</div>
+        </div>
+        <div class="soft-pill" style="padding:9px 11px;">
+          <strong style="color:var(--brass-accent);">😜 Stickers &amp; Provocações:</strong>
+          <div>Toda vez que alguém grita <strong>TRUCO</strong>, um sticker animado explode na mesa! Use o botão <strong>😜</strong> a qualquer momento para provocar os rivais.</div>
+        </div>
+      </div>
+
+      <button type="button" id="btn-ok-rules" class="btn-rustic-cta" style="width:100%; padding:11px; font-size:12px; text-transform:uppercase;">Bora Trucar!</button>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 2: FIM DA QUEDA (12 PONTOS)
+       ========================================================================= -->
+  <div id="modal-match-end" class="modal-overlay hidden">
+    <div class="rustic-card modal-box" style="max-width:380px; text-align:center; display:flex; flex-direction:column; gap:12px;">
+      <div id="end-emoji" style="font-size:48px; line-height:1;">🏆</div>
+      <div>
+        <span style="font-size:10px; font-weight:900; text-transform:uppercase; color:var(--brass-accent);">Queda Encerrada (12 Tentos)</span>
+        <h3 id="end-title" class="font-serif-rustic" style="margin:4px 0; font-size:21px;">Nós Vencemos!</h3>
+        <p id="end-sub" style="margin:0; font-size:12px; color:var(--text-muted);">Placar Final: 12 x 6</p>
+      </div>
+
+      <div style="display:flex; gap:8px;">
+        <button type="button" id="btn-play-again" class="btn-rustic-cta" style="flex:1; padding:12px; font-size:12.5px; text-transform:uppercase;">Revanche!</button>
+        <button type="button" id="btn-end-lobby" class="soft-pill" style="padding:12px 14px; font-size:12px; font-weight:900;">Lobby</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MOTOR COMPLETO DO TRUCO RAIZ & ARENA (PAULISTA & MINEIRO, 1V1/2V2/3V3,
+       EXPLOSÃO DE STICKERS ANIMADOS, ÁUDIO SERTANEJO & SALAS ONLINE P2P)
+       ========================================================================= -->
+  <script>
+    window.addEventListener('load', () => {
+      'use strict';
+
+      /* -----------------------------------------------------------------------
+         1. PWA MANIFEST & SERVICE WORKER INLINE
+         ----------------------------------------------------------------------- */
+      // Manifest e ícones agora são arquivos reais (manifest.webmanifest, icon.svg, icon-*.png).
+      // Service worker precisa ser um arquivo do mesmo domínio: blob: URL é recusado pelo navegador.
+      try {
+        if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+          navigator.serviceWorker.register('sw.js').catch(() => {});
+        }
+      } catch (_) {}
+
+      // Escapa texto vindo de outros jogadores (nomes, stickers) antes de ir para innerHTML.
+      function esc(str) {
+        return String(str == null ? '' : str)
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      }
+
+      function safePhotoUrl(url) {
+        return typeof url === 'string' && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(url) ? url : null;
+      }
+
+      /* -----------------------------------------------------------------------
+         2. SINTETIZADOR DE ÁUDIO (BATIDA NA MESA, GRITO DE TRUCO, STICKER & VITÓRIA)
+         ----------------------------------------------------------------------- */
+      class TrucoSoundFX {
+        constructor() {
+          this.enabled = true;
+          this.ctx = null;
+        }
+        init() {
+          if (!this.enabled) return null;
+          try {
+            if (!this.ctx) {
+              const AC = window.AudioContext || window.webkitAudioContext;
+              if (AC) this.ctx = new AC();
+            }
+            if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
+          } catch (_) {}
+          return this.ctx;
+        }
+        tone(freq, type = 'triangle', dur = 0.09, vol = 0.08, endFreq = null) {
+          const ctx = this.init();
+          if (!ctx || !this.enabled) return;
+          try {
+            const now = ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, now);
+            if (endFreq) osc.frequency.exponentialRampToValueAtTime(endFreq, now + dur);
+            gain.gain.setValueAtTime(vol, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + dur + 0.01);
+          } catch (_) {}
+        }
+        slamCard() {
+          this.tone(155, 'triangle', 0.09, 0.11, 58);
+        }
+        trucoShout() {
+          this.tone(190, 'sawtooth', 0.16, 0.11, 380);
+          setTimeout(() => this.tone(330, 'sawtooth', 0.24, 0.12, 495), 90);
+          if (navigator.vibrate) try { navigator.vibrate([60, 40, 90]); } catch (_) {}
+        }
+        stickerPop() {
+          this.tone(520, 'sine', 0.08, 0.08, 860);
+          setTimeout(() => this.tone(740, 'triangle', 0.11, 0.07, 980), 65);
+        }
+        foldRun() {
+          this.tone(360, 'sine', 0.22, 0.08, 130);
+        }
+        winHand() {
+          [440, 554.37, 659.25, 880].forEach((f, i) => {
+            setTimeout(() => this.tone(f, 'triangle', 0.16, 0.085), i * 75);
+          });
+        }
+      }
+      const sfx = new TrucoSoundFX();
+
+      /* -----------------------------------------------------------------------
+         3. CATÁLOGO DE STICKERS PROVOCATIVOS & EXPLOSÕES DE TRUCO
+         ----------------------------------------------------------------------- */
+      const TRUCO_CALL_STICKERS = {
+        3: [
+          { emoji: '🤠🔥', title: 'TRUCO LADRÃO!', sub: 'Quero ver segurar essa pedrada!' },
+          { emoji: '🐓💥', title: 'TRUUUCO MARRECO!', sub: 'Corre que ainda dá tempo!' },
+          { emoji: '⚡🃏', title: 'TRUCO NO LOMBO!', sub: 'Aqui tem carta pra dar e vender!' }
+        ],
+        4: [
+          { emoji: '⛰️🔥', title: 'TRUCO MINEIRO!', sub: 'Trem bão vai esquentar agora!' },
+          { emoji: '🐂💥', title: 'TRUUUCO!', sub: 'Segura o touro na unha!' }
+        ],
+        6: [
+          { emoji: '🐓🔥', title: 'SEIS PAPUDO!', sub: 'Achou que eu tava blefando?!' },
+          { emoji: '💣😎', title: 'SEIS NA CARA!', sub: 'Dobra a aposta se tiver coragem!' }
+        ],
+        9: [
+          { emoji: '⚡🐂', title: 'NOVE NO LOMBO!', sub: 'Agora o couro vai comer!' },
+          { emoji: '🌋🔥', title: 'NOVEEE!', sub: 'Tremeu na base, né?!' }
+        ],
+        10: [
+          { emoji: '⛰️💣', title: 'DEZ NA MESA!', sub: 'Coração tá batendo forte aí?' }
+        ],
+        12: [
+          { emoji: '👑💣', title: 'DOZE! VALE A QUEDA!', sub: 'Tudo ou nada na arena!' },
+          { emoji: '🏆🔥', title: 'DOZEEE LADRÃO!', sub: 'Pode fechar a conta e passar a régua!' }
+        ]
+      };
+
+      const TAUNT_STICKERS = [
+        { id: 'pato', emoji: '🦆', text: 'Pato! Quack!' },
+        { id: 'rede', emoji: '🕸️', text: 'Caiu na rede!' },
+        { id: 'zap', emoji: '⚡', text: 'Zap na mão!' },
+        { id: 'tremeu', emoji: '🥶', text: 'Tremeu na base!' },
+        { id: 'chora', emoji: '😭', text: 'Chora bebê!' },
+        { id: 'correr', emoji: '🏃', text: 'Vai correr?' },
+        { id: 'blefe', emoji: '🃏', text: 'Blefe fraco!' },
+        { id: 'pai', emoji: '😎', text: 'Respeita o pai!' },
+        { id: 'seis', emoji: '🔥', text: 'Pode pedir seis!' },
+        { id: 'fome', emoji: '🍖', text: 'Tô com fome de tento!' }
+      ];
+
+      function triggerTrucoExplosionSticker(actorName, nextPoints) {
+        sfx.trucoShout();
+        const arenaEl = document.getElementById('stitched-arena');
+        if (arenaEl) {
+          arenaEl.classList.remove('shake-impact');
+          void arenaEl.offsetWidth;
+          arenaEl.classList.add('shake-impact');
+        }
+
+        const pool = TRUCO_CALL_STICKERS[nextPoints] || TRUCO_CALL_STICKERS[3];
+        const chosen = pool[Math.floor(Math.random() * pool.length)];
+
+        const layer = document.getElementById('sticker-fx-layer');
+        if (!layer) return;
+
+        const el = document.createElement('div');
+        el.className = 'truco-sticker-explosion';
+        el.innerHTML = `
+          <div class="sticker-shockwave"></div>
+          <div class="sticker-badge-card">
+            <div style="font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:0.06em; opacity:0.92;">${esc(actorName)} gritou:</div>
+            <div style="font-size:44px; line-height:1.1; margin:3px 0;">${chosen.emoji}</div>
+            <div class="font-serif-rustic" style="font-size:22px; line-height:1.05; text-shadow:0 2px 6px rgba(0,0,0,0.45);">${chosen.title}</div>
+            <div style="font-size:11px; font-weight:800; margin-top:4px; opacity:0.95;">${chosen.sub}</div>
+          </div>
+        `;
+        layer.appendChild(el);
+        setTimeout(() => { if (el.parentNode) el.remove(); }, 2100);
+      }
+
+      function showFloatingTauntSticker(senderName, stickerObj) {
+        sfx.stickerPop();
+        const layer = document.getElementById('sticker-fx-layer');
+        if (!layer) return;
+
+        const el = document.createElement('div');
+        el.className = 'floating-taunt-sticker';
+        el.innerHTML = `
+          <div style="font-size:10px; font-weight:900; color:var(--brass-accent); text-transform:uppercase;">${esc(senderName)}</div>
+          <div style="font-size:38px; line-height:1.1; margin:2px 0;">${esc(stickerObj.emoji)}</div>
+          <div class="font-serif-rustic" style="font-size:15px;">"${esc(stickerObj.text)}"</div>
+        `;
+        layer.appendChild(el);
+        setTimeout(() => { if (el.parentNode) el.remove(); }, 2400);
+      }
+
+      /* -----------------------------------------------------------------------
+         4. PERFIL LOCAL, 4 TEMAS RÚSTICOS & PERSISTÊNCIA
+         ----------------------------------------------------------------------- */
+      const THEMES = [
+        { id: 'sertao', label: '🤠 Sertão & Viola', meta: '#231208' },
+        { id: 'boteco', label: '🍻 Boteco da Esquina', meta: '#7f1d1d' },
+        { id: 'arena', label: '🔥 Arena Rodeio Noturno', meta: '#090d16' },
+        { id: 'fazenda', label: '🌵 Fazenda & Café', meta: '#362417' }
+      ];
+
+      const AVATARS = [
+        { id: 'cowboy', emoji: '🤠', label: 'Peão' },
+        { id: 'rooster', emoji: '🐓', label: 'Galo' },
+        { id: 'guitar', emoji: '🪕', label: 'Violeiro' },
+        { id: 'bull', emoji: '🐂', label: 'Touro' },
+        { id: 'beer', emoji: '🍻', label: 'Boteco' },
+        { id: 'cactus', emoji: '🌵', label: 'Sertão' },
+        { id: 'fire', emoji: '🔥', label: 'Brabo' },
+        { id: 'crown', emoji: '👑', label: 'Rei do Zap' }
+      ];
+
+      const STORAGE_KEY = 'truco_raiz_profile_v1';
+
+      function loadProfile() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            const p = JSON.parse(raw);
+            return {
+              name: (p.name || 'Violeiro').slice(0, 14),
+              avatarId: p.avatarId || 'cowboy',
+              photoDataUrl: p.photoDataUrl || null,
+              theme: p.theme || 'sertao',
+              wins: Number(p.wins) || 0,
+              games: Number(p.games) || 0,
+              muted: !!p.muted
+            };
+          }
+        } catch (_) {}
+        return { name: 'Violeiro', avatarId: 'cowboy', photoDataUrl: null, theme: 'sertao', wins: 0, games: 0, muted: false };
+      }
+
+      const profile = loadProfile();
+
+      function applyTheme(themeId) {
+        const t = THEMES.find(x => x.id === themeId) || THEMES[0];
+        profile.theme = t.id;
+        document.body.dataset.theme = t.id;
+        const metaTheme = document.querySelector('meta[name="theme-color"]');
+        if (metaTheme) metaTheme.setAttribute('content', t.meta);
+        document.querySelectorAll('[data-set-theme]').forEach(btn => {
+          btn.style.borderColor = btn.dataset.setTheme === t.id ? 'var(--brass-accent)' : 'rgba(146,64,14,0.28)';
+        });
+      }
+
+      function saveProfile() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
+        } catch (_) {}
+        refreshProfileUI();
+        broadcastProfileToRoom();
+      }
+
+      function compressImageFile(file) {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            const img = new Image();
+            img.onload = () => {
+              const sz = 96;
+              const off = document.createElement('canvas');
+              off.width = sz;
+              off.height = sz;
+              const octx = off.getContext('2d');
+              const side = Math.min(img.width, img.height);
+              octx.drawImage(img, (img.width - side) / 2, (img.height - side) / 2, side, side, 0, 0, sz, sz);
+              resolve(off.toDataURL('image/jpeg', 0.72));
+            };
+            img.onerror = () => resolve(null);
+            img.src = ev.target.result;
+          };
+          reader.onerror = () => resolve(null);
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function renderAvatarHTML(avatarId, photoDataUrl) {
+        const photo = safePhotoUrl(photoDataUrl);
+        if (photo) return `<img src="${photo}" alt="Avatar" />`;
+        const av = AVATARS.find(a => a.id === avatarId) || AVATARS[0];
+        return av.emoji;
+      }
+
+      /* -----------------------------------------------------------------------
+         5. ESTADO DO JOGO DE TRUCO (PAULISTA & MINEIRO, 1V1 / 2V2 / 3V3)
+         ----------------------------------------------------------------------- */
+      const TRUCO_RANKS = [
+        { code: '4', power: 1 },
+        { code: '5', power: 2 },
+        { code: '6', power: 3 },
+        { code: '7', power: 4 },
+        { code: 'Q', power: 5 },
+        { code: 'J', power: 6 },
+        { code: 'K', power: 7 },
+        { code: 'A', power: 8 },
+        { code: '2', power: 9 },
+        { code: '3', power: 10 }
+      ];
+
+      // Ordem oficial dos naipes de manilha: ♣ Zap > ♥ Copas > ♠ Espadilha > ♦ Ouros
+      const TRUCO_SUITS = [
+        { id: 'D', sym: '♦', color: 'red', manilhaBonus: 1 },
+        { id: 'S', sym: '♠', color: 'black', manilhaBonus: 2 },
+        { id: 'H', sym: '♥', color: 'red', manilhaBonus: 3 },
+        { id: 'C', sym: '♣', color: 'black', manilhaBonus: 4 }
+      ];
+
+      const state = {
+        activeTab: 'play',
+        gameMode: '2v2', // '1v1' | '2v2' | '3v3'
+        variant: 'paulista', // 'paulista' | 'mineiro'
+        botDiff: 'medium',
+
+        roomCode: 'TRCO',
+        isHost: true,
+        localId: 't_' + Math.random().toString(36).slice(2, 8),
+        roomMembers: {},
+
+        inMatch: false,
+        scoreUs: 0,
+        scoreThem: 0,
+        players: [],
+        dealerIndex: 0,
+        turnIndex: 0,
+        viraCard: null,
+        manilhaRankCode: 'Q',
+        handStake: 1,
+        pendingStake: null,
+        lastTrucoTeam: null, // 'us' | 'them'
+        pendingTrucoCaller: null,
+        vazaResults: [], // 'us' | 'them' | 'tie'
+        currentVazaPlays: [], // [{ playerId, playerName, team, card, blind }]
+        blindNextPlay: false,
+        isIronHand: false,
+        isElevenHand: false,
+        elevenDecisionPending: false, // time com 11 ainda decidindo se joga ou corre
+        resolving: false, // pausa mostrando quem levou a vaza (bloqueia jogadas)
+        vazaHighlightUid: null,
+        tableMessage: null // texto curto mostrado no banner (ex: "Tião levou a vaza!")
+      };
+
+      let stepTimer = null;
+
+      /* -----------------------------------------------------------------------
+         6. BARALHO DE 40 CARTAS, CÁLCULO DE FORÇA E ESCADA DE APOSTAS
+         ----------------------------------------------------------------------- */
+      function buildTrucoDeck40() {
+        const cards = [];
+        let uid = 1;
+        TRUCO_SUITS.forEach(s => {
+          TRUCO_RANKS.forEach(r => {
+            cards.push({
+              uid: uid++,
+              code: r.code,
+              basePower: r.power,
+              suit: s.id,
+              sym: s.sym,
+              color: s.color,
+              manilhaBonus: s.manilhaBonus
+            });
+          });
+        });
+        for (let i = cards.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [cards[i], cards[j]] = [cards[j], cards[i]];
+        }
+        return cards;
+      }
+
+      function computeManilhaCode(vira) {
+        const idx = TRUCO_RANKS.findIndex(r => r.code === vira.code);
+        return TRUCO_RANKS[(idx + 1) % TRUCO_RANKS.length].code;
+      }
+
+      function isCardManilha(card) {
+        if (state.variant === 'paulista') {
+          return card.code === state.manilhaRankCode;
+        }
+        // Truco Mineiro: 4♣ (Zap), 7♥ (Copas), A♠ (Espadilha), 7♦ (Ouros)
+        return (card.code === '4' && card.suit === 'C') ||
+               (card.code === '7' && card.suit === 'H') ||
+               (card.code === 'A' && card.suit === 'S') ||
+               (card.code === '7' && card.suit === 'D');
+      }
+
+      function getCardEffectivePower(card, blind = false) {
+        if (blind) return 0;
+        if (!isCardManilha(card)) return card.basePower;
+
+        if (state.variant === 'paulista') {
+          return 100 + card.manilhaBonus;
+        }
+        if (card.code === '4' && card.suit === 'C') return 104;
+        if (card.code === '7' && card.suit === 'H') return 103;
+        if (card.code === 'A' && card.suit === 'S') return 102;
+        return 101; // 7♦
+      }
+
+      function getNextStakeValue(currentStake) {
+        if (state.variant === 'paulista') {
+          if (currentStake === 1) return 3;
+          if (currentStake === 3) return 6;
+          if (currentStake === 6) return 9;
+          if (currentStake === 9) return 12;
+          return null;
+        } else {
+          if (currentStake === 2) return 4;
+          if (currentStake === 4) return 6;
+          if (currentStake === 6) return 10;
+          if (currentStake === 10) return 12;
+          return null;
+        }
+      }
+
+      function getStakeCallWord(val) {
+        if (val === 3 || val === 4) return 'TRUCO!';
+        if (val === 6) return 'SEIS!';
+        if (val === 9) return 'NOVE!';
+        if (val === 10) return 'DEZ!';
+        if (val === 12) return 'DOZE!';
+        return `VALENDO ${val}!`;
+      }
+
+      /* -----------------------------------------------------------------------
+         7. INÍCIO DE QUEDA (12 TENTOS) & FLUXO DE MÃOS / VAZAS
+         ----------------------------------------------------------------------- */
+      const BOT_PERSONAS = [
+        { name: 'Tião', avatarId: 'cowboy' },
+        { name: 'Zé Galo', avatarId: 'rooster' },
+        { name: 'Chica', avatarId: 'guitar' },
+        { name: 'Tonho', avatarId: 'bull' },
+        { name: 'Bento', avatarId: 'cactus' }
+      ];
+
+      function getBaseStake() {
+        return state.variant === 'paulista' ? 1 : 2;
+      }
+
+      function otherTeam(team) {
+        return team === 'us' ? 'them' : 'us';
+      }
+
+      function startMatch() {
+        sfx.init();
+        clearTimeout(stepTimer);
+
+        // Convidado só pode começar se não houver líder na sala; senão vira o líder (jogo local com bots).
+        if (!state.isHost) {
+          const hostOnline = Object.values(state.roomMembers).some(m => m.isHost && m.id !== state.localId);
+          if (hostOnline) {
+            showFloatingTauntSticker('SALA', { emoji: '👑', text: 'Aguarde o líder da sala começar!' });
+            return;
+          }
+          state.isHost = true;
+          broadcastProfileToRoom();
+        }
+
+        const totalSeats = state.gameMode === '1v1' ? 2 : (state.gameMode === '2v2' ? 4 : 6);
+        const humans = Object.values(state.roomMembers);
+        const roster = [];
+
+        humans.slice(0, totalSeats).forEach(h => {
+          roster.push({
+            id: h.id,
+            name: h.name,
+            avatarId: h.avatarId,
+            photoDataUrl: h.photoDataUrl,
+            isBot: false
+          });
+        });
+
+        let bi = 0;
+        while (roster.length < totalSeats) {
+          const bp = BOT_PERSONAS[bi % BOT_PERSONAS.length];
+          roster.push({
+            id: 'bot_' + bi,
+            name: bp.name,
+            avatarId: bp.avatarId,
+            photoDataUrl: null,
+            isBot: true
+          });
+          bi++;
+        }
+
+        // Assentos alternados: índices pares = NÓS ('us'), índices ímpares = ELES ('them')
+        state.players = roster.map((r, idx) => ({
+          ...r,
+          team: idx % 2 === 0 ? 'us' : 'them',
+          hand: []
+        }));
+
+        state.inMatch = true;
+        state.scoreUs = 0;
+        state.scoreThem = 0;
+        state.dealerIndex = 0;
+
+        document.getElementById('lobby-screen').classList.add('hidden');
+        document.getElementById('modal-match-end').classList.add('hidden');
+        document.getElementById('truco-response-overlay').classList.add('hidden');
+        document.getElementById('eleven-overlay').classList.add('hidden');
+        document.getElementById('game-screen').classList.remove('hidden');
+
+        beginNewHand(true);
+      }
+
+      function beginNewHand(firstHand = false) {
+        clearTimeout(stepTimer);
+        if (!firstHand) {
+          state.dealerIndex = (state.dealerIndex + 1) % state.players.length;
+        }
+
+        const deck = buildTrucoDeck40();
+        state.players.forEach(p => {
+          p.hand = [deck.pop(), deck.pop(), deck.pop()];
+        });
+
+        state.viraCard = deck.pop();
+        state.manilhaRankCode = computeManilhaCode(state.viraCard);
+
+        state.isIronHand = state.scoreUs === 11 && state.scoreThem === 11;
+        state.isElevenHand = !state.isIronHand && (state.scoreUs === 11 || state.scoreThem === 11);
+
+        // Na Mão de 11 no Truco Paulista começa valendo 3 pontos; Mineiro começa em 2
+        if (state.variant === 'paulista') {
+          state.handStake = state.isElevenHand ? 3 : 1;
+        } else {
+          state.handStake = state.isElevenHand ? 4 : 2;
+        }
+
+        state.pendingStake = null;
+        state.lastTrucoTeam = null;
+        state.pendingTrucoCaller = null;
+        state.vazaResults = [];
+        state.currentVazaPlays = [];
+        state.blindNextPlay = false;
+        state.resolving = false;
+        state.vazaHighlightUid = null;
+        state.tableMessage = null;
+        state.elevenDecisionPending = state.isElevenHand;
+        state.turnIndex = (state.dealerIndex + 1) % state.players.length;
+
+        renderArenaUI();
+        syncMatchToPeers();
+
+        if (state.isIronHand) {
+          showFloatingTauntSticker('ARENA', { emoji: '⚔️', text: 'MÃO DE FERRO! Cartas no escuro!' });
+        } else if (state.isElevenHand) {
+          startElevenDecision();
+          return;
+        }
+
+        scheduleBotActionIfNeeded();
+      }
+
+      /* Mão de 11: o time que está com 11 vê as cartas do parceiro e decide se joga ou corre. */
+      function startElevenDecision() {
+        const elevenTeam = state.scoreUs === 11 ? 'us' : 'them';
+        const me = getLocalPlayer();
+
+        if (me && me.team === elevenTeam) {
+          const mates = state.players.filter(p => p.team === elevenTeam);
+          document.getElementById('eleven-sub').textContent =
+            `Jogar vale ${state.handStake} tentos. Correr dá ${getBaseStake()} tento(s) para o rival.`;
+          document.getElementById('eleven-cards').innerHTML = mates.map(p => `
+            <div class="soft-pill" style="padding:7px 10px;">
+              ${p.id === me.id ? 'Suas cartas' : esc(p.name)}:
+              ${p.hand.map(c => `<span style="color:${c.color === 'red' ? 'var(--suit-red)' : 'var(--suit-black)'}; margin-left:6px;">${c.code}${c.sym}${isCardManilha(c) ? '⚡' : ''}</span>`).join('')}
+            </div>
+          `).join('');
+          document.getElementById('eleven-overlay').classList.remove('hidden');
+          return;
+        }
+
+        // Bots (ou líder sem estar no time) decidem pela força das cartas do time
+        stepTimer = setTimeout(() => {
+          const strength = teamHandStrength(elevenTeam);
+          resolveElevenDecision(strength >= 3 || Math.random() < 0.25 ? 'play' : 'run');
+        }, 1100);
+      }
+
+      function resolveElevenDecision(decision) {
+        document.getElementById('eleven-overlay').classList.add('hidden');
+        if (!state.inMatch || !state.elevenDecisionPending) return;
+        const elevenTeam = state.scoreUs === 11 ? 'us' : 'them';
+        state.elevenDecisionPending = false;
+
+        if (decision === 'run') {
+          sfx.foldRun();
+          state.handStake = getBaseStake();
+          state.tableMessage = elevenTeam === getMyTeam() ? 'Corremos da mão de 11!' : 'Eles correram da mão de 11!';
+          showFloatingTauntSticker('MÃO DE 11', { emoji: '🏳️', text: state.tableMessage });
+          awardHandPoints(otherTeam(elevenTeam), false);
+          return;
+        }
+
+        state.tableMessage = null;
+        showFloatingTauntSticker('MÃO DE 11', { emoji: '🔥', text: `Vai jogar! Valendo ${state.handStake}!` });
+        renderArenaUI();
+        syncMatchToPeers();
+        scheduleBotActionIfNeeded();
+      }
+
+      function getCurrentPlayer() {
+        return state.players[state.turnIndex];
+      }
+
+      function getLocalPlayer() {
+        return state.players.find(p => p.id === state.localId) || state.players[0];
+      }
+
+      function getMyTeam() {
+        const me = getLocalPlayer();
+        return me ? me.team : 'us';
+      }
+
+      function isLocalTurn() {
+        const curr = getCurrentPlayer();
+        return !!(state.inMatch && state.pendingStake === null && !state.resolving &&
+          !state.elevenDecisionPending && curr && curr.id === state.localId);
+      }
+
+      /* Força estimada das cartas de um time (usada pelos bots para trucar, aceitar e decidir a mão de 11). */
+      function teamHandStrength(team) {
+        let strength = 0;
+        state.players.filter(p => p.team === team).forEach(p => {
+          p.hand.forEach(c => {
+            const pwr = getCardEffectivePower(c, false);
+            if (pwr >= 104) strength += 4;
+            else if (pwr >= 101) strength += 3;
+            else if (c.basePower >= 9) strength += 1.5; // 2 e 3
+            else if (c.basePower === 8) strength += 0.8; // Ás
+          });
+        });
+        const won = state.vazaResults.filter(r => r === team).length;
+        const lost = state.vazaResults.filter(r => r === otherTeam(team)).length;
+        return strength + won * 2.5 - lost * 2.5;
+      }
+
+      /* -----------------------------------------------------------------------
+         8. JOGAR CARTA, RESOLVER VAZA (MELHOR DE 3) & PEDIR / RESPONDER TRUCO
+         ----------------------------------------------------------------------- */
+      function playCardOnTable(playerId, cardUid, playBlind = false) {
+        const curr = getCurrentPlayer();
+        if (!state.inMatch || state.pendingStake !== null || state.resolving || state.elevenDecisionPending) return;
+        if (!curr || curr.id !== playerId) return;
+
+        const cIdx = curr.hand.findIndex(c => c.uid === cardUid);
+        if (cIdx === -1) return;
+
+        const [card] = curr.hand.splice(cIdx, 1);
+        // Coberta (vale zero) só a partir da 2ª vaza. Na mão de ferro a carta vale normalmente:
+        // o jogador só não sabe qual é antes de jogar.
+        const blind = !state.isIronHand && !!playBlind && state.vazaResults.length >= 1;
+        if (curr.id === state.localId) state.blindNextPlay = false;
+
+        state.currentVazaPlays.push({
+          playerId: curr.id,
+          playerName: curr.name,
+          team: curr.team,
+          card,
+          blind
+        });
+
+        sfx.slamCard();
+
+        if (state.currentVazaPlays.length >= state.players.length) {
+          state.resolving = true;
+          renderArenaUI();
+          syncMatchToPeers();
+          stepTimer = setTimeout(() => evaluateCompletedVaza(), 700);
+        } else {
+          state.turnIndex = (state.turnIndex + 1) % state.players.length;
+          renderArenaUI();
+          syncMatchToPeers();
+          scheduleBotActionIfNeeded();
+        }
+      }
+
+      /* Retorna 'us' | 'them' | 'none' (mão empatada, ninguém pontua) ou null (mão continua). */
+      function computeHandWinner() {
+        const res = state.vazaResults;
+        const usWins = res.filter(r => r === 'us').length;
+        const themWins = res.filter(r => r === 'them').length;
+        const [r1, r2, r3] = res;
+
+        if (usWins >= 2) return 'us';
+        if (themWins >= 2) return 'them';
+        if (res.length === 2) {
+          if (r1 === 'tie' && r2 !== 'tie') return r2; // empatou a 1ª: quem ganhar a 2ª leva
+          if (r1 !== 'tie' && r2 === 'tie') return r1; // empatou a 2ª: vale quem fez a 1ª
+        }
+        if (res.length === 3) {
+          if (r1 !== 'tie' && r3 === 'tie') return r1; // empatou a 3ª: vale quem fez a 1ª
+          if (r3 !== 'tie') return r3;
+          return 'none'; // três empates
+        }
+        return null;
+      }
+
+      function evaluateCompletedVaza() {
+        let bestPower = -1;
+        let winningTeam = 'tie';
+        let winningPlay = null;
+
+        state.currentVazaPlays.forEach(play => {
+          const pwr = getCardEffectivePower(play.card, play.blind);
+          if (pwr > bestPower) {
+            bestPower = pwr;
+            winningTeam = play.team;
+            winningPlay = play;
+          } else if (pwr === bestPower && play.team !== winningTeam) {
+            winningTeam = 'tie';
+          }
+        });
+
+        state.vazaResults.push(winningTeam);
+        state.vazaHighlightUid = winningTeam === 'tie' ? null : winningPlay.card.uid;
+        state.tableMessage = winningTeam === 'tie'
+          ? '🤝 Cangou! Vaza empatada.'
+          : `${winningPlay.playerName} levou a vaza!`;
+        renderArenaUI();
+        syncMatchToPeers();
+
+        const handWinnerTeam = computeHandWinner();
+
+        // Pausa para todo mundo ver quem levou a vaza antes de limpar a mesa
+        stepTimer = setTimeout(() => {
+          state.resolving = false;
+          state.vazaHighlightUid = null;
+
+          if (handWinnerTeam) {
+            awardHandPoints(handWinnerTeam);
+            return;
+          }
+
+          // Próxima vaza começa por quem jogou a maior carta; no empate, por quem abriu a vaza
+          const starterPlay = winningTeam === 'tie' ? state.currentVazaPlays[0] : winningPlay;
+          const starterIdx = state.players.findIndex(p => p.id === starterPlay.playerId);
+          state.turnIndex = starterIdx !== -1 ? starterIdx : 0;
+          state.currentVazaPlays = [];
+          state.tableMessage = null;
+
+          renderArenaUI();
+          syncMatchToPeers();
+          scheduleBotActionIfNeeded();
+        }, 1300);
+      }
+
+      function callTrucoRaise(callerId) {
+        const caller = state.players.find(p => p.id === callerId);
+        if (!state.inMatch || !caller || state.isElevenHand || state.isIronHand) return;
+        if (state.pendingStake !== null || state.resolving || state.elevenDecisionPending) return;
+        if (state.lastTrucoTeam === caller.team) return;
+
+        const nextVal = getNextStakeValue(state.handStake);
+        if (!nextVal) return;
+
+        state.pendingStake = nextVal;
+        state.pendingTrucoCaller = caller;
+
+        // EXPLOSÃO DE STICKER ANIMADO SEMPRE QUE ALGUÉM PEDE TRUCO / 6 / 9 / 12!
+        triggerTrucoExplosionSticker(caller.name, nextVal);
+
+        // Quem responde: eu (se estou no time desafiado), senão um humano remoto, senão os bots
+        const responderTeam = otherTeam(caller.team);
+        const responders = state.players.filter(p => p.team === responderTeam);
+        const localResponds = responders.some(p => p.id === state.localId);
+        const remoteHuman = responders.find(p => !p.isBot && p.id !== state.localId);
+
+        sendRoomPacket({
+          type: 'TRUCO_CALLED',
+          callerName: caller.name,
+          nextVal,
+          targetId: !localResponds && remoteHuman ? remoteHuman.id : null
+        });
+        renderArenaUI();
+        syncMatchToPeers();
+
+        if (localResponds) {
+          openTrucoResponsePrompt(caller, nextVal);
+        } else if (!remoteHuman) {
+          stepTimer = setTimeout(() => evaluateBotTrucoResponse(nextVal), 1250);
+        }
+      }
+
+      function openTrucoResponsePrompt(caller, nextVal) {
+        const overlay = document.getElementById('truco-response-overlay');
+        const word = getStakeCallWord(nextVal);
+        document.getElementById('response-title').textContent = `${caller.name} pediu ${word} (Valendo ${nextVal})`;
+        document.getElementById('response-sub').textContent =
+          `Aceitar: a mão passa a valer ${nextVal}. Correr: o rival ganha ${state.handStake} ponto(s).`;
+
+        const raiseAgainVal = getNextStakeValue(nextVal);
+        const raiseBtn = document.getElementById('btn-resp-raise');
+        if (raiseAgainVal) {
+          raiseBtn.classList.remove('hidden');
+          raiseBtn.textContent = `🔥 PEDIR ${getStakeCallWord(raiseAgainVal)}`;
+        } else {
+          raiseBtn.classList.add('hidden');
+        }
+
+        overlay.classList.remove('hidden');
+      }
+
+      function resolveTrucoResponse(decision, responderId = null) {
+        // decision: 'accept' | 'raise' | 'fold'
+        document.getElementById('truco-response-overlay').classList.add('hidden');
+
+        // Convidado: manda a resposta para o líder da sala decidir
+        if (!state.isHost) {
+          sendRoomPacket({ type: 'TRUCO_ANSWER', decision });
+          return;
+        }
+
+        if (state.pendingStake === null || !state.pendingTrucoCaller) return;
+
+        const caller = state.pendingTrucoCaller;
+        const responderTeam = otherTeam(caller.team);
+        const acceptedVal = state.pendingStake;
+
+        if (decision === 'fold') {
+          sfx.foldRun();
+          const runnerLabel = responderTeam === getMyTeam() ? 'Nós corremos' : 'Eles correram';
+          showFloatingTauntSticker(runnerLabel, { emoji: '🏳️', text: `Correu! +${state.handStake} tento(s)!` });
+          state.pendingStake = null;
+          state.pendingTrucoCaller = null;
+          state.tableMessage = `${runnerLabel}!`;
+          awardHandPoints(caller.team, false);
+          return;
+        }
+
+        if (decision === 'accept') {
+          state.handStake = acceptedVal;
+          state.lastTrucoTeam = caller.team;
+          state.pendingStake = null;
+          state.pendingTrucoCaller = null;
+          showFloatingTauntSticker('DESCE!', { emoji: '👊🔥', text: `Aceito! Valendo ${state.handStake} tentos!` });
+          renderArenaUI();
+          syncMatchToPeers();
+          scheduleBotActionIfNeeded();
+          return;
+        }
+
+        if (decision === 'raise') {
+          state.handStake = acceptedVal;
+          state.lastTrucoTeam = caller.team;
+          state.pendingStake = null;
+          state.pendingTrucoCaller = null;
+          let raiser = responderId ? state.players.find(p => p.id === responderId) : null;
+          if (!raiser || raiser.team !== responderTeam) {
+            raiser = state.players.find(p => p.id === state.localId && p.team === responderTeam) ||
+                     state.players.find(p => p.team === responderTeam);
+          }
+          if (raiser) callTrucoRaise(raiser.id);
+        }
+      }
+
+      function evaluateBotTrucoResponse(proposedVal) {
+        if (state.pendingStake !== proposedVal || !state.pendingTrucoCaller) return;
+
+        const responderTeam = otherTeam(state.pendingTrucoCaller.team);
+        const strength = teamHandStrength(responderTeam);
+        const canRaise = getNextStakeValue(proposedVal) !== null;
+        const roll = Math.random();
+        const bluff = state.botDiff === 'hard' ? 0.3 : (state.botDiff === 'easy' ? 0.15 : 0.2);
+        const acceptAt = state.botDiff === 'easy' ? 2 : 2.5;
+
+        if (strength >= 6 && canRaise && roll < 0.45) {
+          resolveTrucoResponse('raise');
+        } else if (strength >= acceptAt || roll < bluff) {
+          resolveTrucoResponse('accept');
+        } else {
+          resolveTrucoResponse('fold');
+        }
+      }
+
+      function awardHandPoints(winnerTeam, showResult = true) {
+        clearTimeout(stepTimer);
+        state.pendingStake = null;
+        state.pendingTrucoCaller = null;
+        state.resolving = false;
+        state.vazaHighlightUid = null;
+
+        const myTeam = getMyTeam();
+        if (winnerTeam === 'us') state.scoreUs = Math.min(12, state.scoreUs + state.handStake);
+        else if (winnerTeam === 'them') state.scoreThem = Math.min(12, state.scoreThem + state.handStake);
+
+        if (showResult) {
+          if (winnerTeam === 'none') {
+            state.tableMessage = 'Mão empatada: ninguém pontua.';
+            showFloatingTauntSticker('MÃO', { emoji: '🤝', text: 'Empate! Ninguém pontua.' });
+          } else {
+            const mine = winnerTeam === myTeam;
+            state.tableMessage = mine ? `Nós levamos a mão! +${state.handStake}` : `Eles levaram a mão! +${state.handStake}`;
+            showFloatingTauntSticker('MÃO', { emoji: mine ? '🎉' : '😤', text: state.tableMessage });
+          }
+        }
+
+        state.currentVazaPlays = [];
+        renderArenaUI();
+
+        if (state.scoreUs >= 12 || state.scoreThem >= 12) {
+          state.inMatch = false;
+          const winner = state.scoreUs >= 12 ? 'us' : 'them';
+          syncMatchToPeers();
+          showMatchEnd(winner === myTeam, true);
+          return;
+        }
+
+        syncMatchToPeers();
+        if (winnerTeam === myTeam) sfx.winHand();
+        stepTimer = setTimeout(() => beginNewHand(false), 1700);
+      }
+
+      function showMatchEnd(weWon, countStats) {
+        if (countStats) {
+          profile.games++;
+          if (weWon) profile.wins++;
+          saveProfile();
+        }
+        if (weWon) sfx.winHand();
+        const mine = getMyTeam() === 'us' ? state.scoreUs : state.scoreThem;
+        const theirs = getMyTeam() === 'us' ? state.scoreThem : state.scoreUs;
+        document.getElementById('truco-response-overlay').classList.add('hidden');
+        document.getElementById('eleven-overlay').classList.add('hidden');
+        document.getElementById('end-emoji').textContent = weWon ? '🏆' : '🤠';
+        document.getElementById('end-title').textContent = weWon ? 'Nós Vencemos a Queda!' : 'Eles Levaram a Queda!';
+        document.getElementById('end-sub').textContent = `Placar Final: Nós ${mine} x ${theirs} Eles`;
+        document.getElementById('modal-match-end').classList.remove('hidden');
+      }
+
+      /* -----------------------------------------------------------------------
+         9. INTELIGÊNCIA DOS BOTS + RESPOSTA COM STICKERS PROVOCATIVOS
+         ----------------------------------------------------------------------- */
+      function scheduleBotActionIfNeeded() {
+        clearTimeout(stepTimer);
+        if (!state.inMatch || !state.isHost || state.pendingStake !== null) return;
+        if (state.resolving || state.elevenDecisionPending) return;
+        const curr = getCurrentPlayer();
+        if (!curr || !curr.isBot) return;
+
+        const delay = state.botDiff === 'hard' ? 760 : 960;
+        stepTimer = setTimeout(() => executeBotTurn(curr), delay);
+      }
+
+      function executeBotTurn(bot) {
+        if (!state.inMatch || state.pendingStake !== null || state.resolving || state.elevenDecisionPending) return;
+        if (getCurrentPlayer().id !== bot.id) return;
+
+        // Mão de ferro: ninguém vê as cartas, joga qualquer uma
+        if (state.isIronHand) {
+          const pick = bot.hand[Math.floor(Math.random() * bot.hand.length)];
+          playCardOnTable(bot.id, pick.uid, false);
+          return;
+        }
+
+        // Decide se pede Truco antes de jogar a carta
+        const nextVal = getNextStakeValue(state.handStake);
+        const canCall = !state.isElevenHand && nextVal !== null && state.lastTrucoTeam !== bot.team;
+        if (canCall) {
+          const strength = teamHandStrength(bot.team);
+          const bluffChance = state.botDiff === 'hard' ? 0.12 : (state.botDiff === 'easy' ? 0.03 : 0.07);
+          if ((strength >= 5 && Math.random() < 0.45) || Math.random() < bluffChance) {
+            callTrucoRaise(bot.id);
+            return;
+          }
+        }
+
+        // Escolhe a carta para a vaza
+        const pwr = c => getCardEffectivePower(c, false);
+        const sortedHand = bot.hand.slice().sort((a, b) => pwr(a) - pwr(b));
+        let chosen = sortedHand[sortedHand.length - 1];
+
+        if (state.currentVazaPlays.length > 0) {
+          let best = null;
+          state.currentVazaPlays.forEach(p => {
+            const v = getCardEffectivePower(p.card, p.blind);
+            if (!best || v > best.v) best = { v, team: p.team };
+          });
+          if (best.team === bot.team) {
+            chosen = sortedHand[0]; // parceiro já está ganhando: guarda as boas
+          } else {
+            const winningCard = sortedHand.find(c => pwr(c) > best.v);
+            chosen = winningCard || sortedHand[0];
+          }
+        } else if (state.vazaResults.length === 0 && sortedHand.length >= 2) {
+          chosen = sortedHand[sortedHand.length - 2];
+        }
+
+        playCardOnTable(bot.id, chosen.uid, false);
+      }
+
+      function maybeBotReplyWithTaunt() {
+        const bots = state.players.filter(p => p.isBot && p.team === 'them');
+        if (bots.length === 0) return;
+        setTimeout(() => {
+          if (!state.inMatch) return;
+          const b = bots[Math.floor(Math.random() * bots.length)];
+          const st = TAUNT_STICKERS[Math.floor(Math.random() * TAUNT_STICKERS.length)];
+          showFloatingTauntSticker(b.name, st);
+        }, 1250);
+      }
+
+      /* -----------------------------------------------------------------------
+         10. RENDERIZAÇÃO DA ARENA & GESTOS TÁTEIS NAS CARTAS
+         ----------------------------------------------------------------------- */
+      function renderCardFace(c, extraCls, small) {
+        const col = c.color === 'red' ? 'var(--suit-red)' : 'var(--suit-black)';
+        const manilha = isCardManilha(c);
+        const fs = small ? 14 : 15;
+        const big = small ? 28 : 30;
+        return `
+          ${manilha ? `<span class="manilha-crown-tag">${small ? '⚡MANILHA' : '⚡'}</span>` : ''}
+          <div style="display:flex; justify-content:space-between; font-size:${fs}px; font-weight:900; color:${col};">
+            <span>${c.code}</span><span>${c.sym}</span>
+          </div>
+          <div style="font-size:${big}px; color:${col}; text-align:center; line-height:1;">${c.sym}</div>
+          <div style="display:flex; justify-content:space-between; font-size:${fs}px; font-weight:900; color:${col}; transform:rotate(180deg);">
+            <span>${c.code}</span><span>${c.sym}</span>
+          </div>
+        `;
+      }
+
+      function renderArenaUI() {
+        const me = getLocalPlayer();
+        const myTeam = getMyTeam();
+        const curr = getCurrentPlayer();
+        const isMyTurn = isLocalTurn();
+        const myScore = myTeam === 'us' ? state.scoreUs : state.scoreThem;
+        const theirScore = myTeam === 'us' ? state.scoreThem : state.scoreUs;
+
+        document.getElementById('game-variant-badge').textContent = state.variant === 'paulista' ? '⚡ Paulista' : '⛰️ Mineiro';
+        document.getElementById('game-stake-badge').textContent = `Valendo ${state.handStake} pt${state.handStake > 1 ? 's' : ''}`;
+        document.getElementById('score-us-num').textContent = myScore;
+        document.getElementById('score-them-num').textContent = theirScore;
+
+        const dotsEl = document.getElementById('vaza-dots-row');
+        dotsEl.innerHTML = [0, 1, 2].map(i => {
+          const r = state.vazaResults[i];
+          const cls = r === 'tie' ? 'win-tie' : (r === myTeam ? 'win-us' : (r ? 'win-them' : ''));
+          const tip = r === 'tie' ? 'empate' : (r === myTeam ? 'nossa' : (r ? 'deles' : 'a jogar'));
+          return `<span class="vaza-dot ${cls}" title="Vaza ${i + 1}: ${tip}"></span>`;
+        }).join('');
+
+        // Vira / Manilha
+        const viraBox = document.getElementById('vira-box');
+        if (state.variant === 'paulista' && state.viraCard) {
+          viraBox.classList.remove('hidden');
+          const vCol = state.viraCard.color === 'red' ? 'var(--suit-red)' : 'var(--suit-black)';
+          document.getElementById('vira-card-mini').innerHTML = `<span style="color:${vCol};">${state.viraCard.code}${state.viraCard.sym}</span>`;
+          document.getElementById('manilha-rank-lbl').textContent = `Manilha: ${state.manilhaRankCode}`;
+        } else {
+          viraBox.classList.add('hidden');
+        }
+
+        // Assentos dos demais jogadores
+        const oppRow = document.getElementById('opponents-row');
+        const others = state.players.filter(p => !me || p.id !== me.id);
+        oppRow.innerHTML = others.map(p => {
+          const turnCls = curr && curr.id === p.id && !state.resolving ? 'turn-active' : '';
+          const sideTag = p.team === myTeam
+            ? '<span style="color:#86efac; font-weight:900;">Parceiro</span>'
+            : '<span style="color:#fca5a5; font-weight:900;">Rival</span>';
+          return `
+            <div class="seat-pill ${turnCls}">
+              <span style="display:flex; align-items:center; gap:5px; min-width:0;">
+                <span class="seat-avatar">${renderAvatarHTML(p.avatarId, p.photoDataUrl)}</span>
+                <span style="min-width:0; line-height:1.15;">
+                  <span style="display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:800;">${esc(p.name)}</span>
+                  <span style="font-size:10px;">${sideTag}${p.isBot ? ' <span title="Jogador do computador">🤖</span>' : ''}</span>
+                </span>
+              </span>
+              <span style="font-weight:900; flex-shrink:0;" title="Cartas na mão">🃏${p.hand.length}</span>
+            </div>
+          `;
+        }).join('');
+
+        // Banner do turno (sempre diz claramente o que está acontecendo)
+        const banner = document.getElementById('turn-banner');
+        banner.classList.remove('my-turn-banner');
+        // tableMessage só existe durante pausas (vaza decidida, mão encerrada, correu)
+        if (state.tableMessage) {
+          banner.textContent = state.tableMessage;
+        } else if (state.elevenDecisionPending) {
+          banner.textContent = '⏳ Mão de 11: decidindo se joga ou corre...';
+        } else if (state.pendingStake !== null) {
+          banner.textContent = `⏳ ${getStakeCallWord(state.pendingStake)} Aguardando resposta...`;
+        } else if (isMyTurn) {
+          banner.textContent = state.blindNextPlay
+            ? '🙈 SUA VEZ! A próxima carta vai COBERTA.'
+            : '👉 SUA VEZ! Toque numa carta para jogar.';
+          banner.classList.add('my-turn-banner');
+        } else if (curr) {
+          banner.textContent = `⏳ Vez de ${curr.name}...`;
+        }
+
+        // Cartas jogadas na mesa nesta vaza
+        const ring = document.getElementById('played-cards-ring');
+        if (state.currentVazaPlays.length === 0) {
+          ring.innerHTML = `<span style="font-size:12px; color:var(--hud-text); opacity:0.75; font-weight:800;">Vaza ${Math.min(3, state.vazaResults.length + 1)} de 3 — mesa limpa</span>`;
+        } else {
+          const showResult = state.resolving && state.vazaResults.length > 0;
+          ring.innerHTML = state.currentVazaPlays.map(play => {
+            const isWinner = state.vazaHighlightUid !== null && play.card.uid === state.vazaHighlightUid;
+            const slotCls = showResult && state.vazaHighlightUid !== null && !isWinner ? 'vaza-loser' : '';
+            const nameColor = play.team === myTeam ? '#86efac' : '#fca5a5';
+            const nameTag = `<span style="font-size:10.5px; font-weight:900; color:${nameColor}; max-width:80px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${esc(play.playerName)}</span>`;
+            if (play.blind) {
+              return `
+                <div class="table-played-slot ${slotCls}">
+                  <div class="truco-table-card face-down">
+                    <span style="font-size:22px;">🙈</span>
+                    <span style="font-size:9px; font-weight:900;">COBERTA</span>
+                  </div>
+                  ${nameTag}
+                </div>
+              `;
+            }
+            const c = play.card;
+            return `
+              <div class="table-played-slot ${slotCls}">
+                <div class="truco-table-card ${isCardManilha(c) ? 'is-manilha' : ''} ${isWinner ? 'vaza-winner' : ''}">
+                  ${renderCardFace(c, '', true)}
+                </div>
+                ${nameTag}
+              </div>
+            `;
+          }).join('');
+        }
+
+        // Mão do Jogador Local
+        if (!me) return;
+        document.getElementById('local-seat-avatar').innerHTML = renderAvatarHTML(me.avatarId, me.photoDataUrl);
+        document.getElementById('local-seat-name').textContent = me.name;
+        document.querySelector('.local-dock').classList.toggle('my-turn', isMyTurn);
+        document.getElementById('local-hand-sub').textContent = isMyTurn
+          ? 'Toque numa carta para jogar'
+          : (state.isIronHand ? 'Mão de ferro: suas cartas estão viradas' : 'Espere sua vez');
+
+        const partner = state.players.find(p => p.team === myTeam && p.id !== me.id);
+        const peekBadge = document.getElementById('partner-peek-badge');
+        const peekStrip = document.getElementById('partner-eleven-strip');
+        if (state.isElevenHand && myScore === 11 && partner) {
+          peekBadge.classList.remove('hidden');
+          peekStrip.classList.remove('hidden');
+          peekStrip.innerHTML = `🤝 Cartas de ${esc(partner.name)}: ` + partner.hand.map(c => `${c.code}${c.sym}`).join(' • ');
+        } else {
+          peekBadge.classList.add('hidden');
+          peekStrip.classList.add('hidden');
+        }
+
+        const handRow = document.getElementById('local-hand-row');
+        const stateCls = isMyTurn ? 'playable' : 'waiting';
+        handRow.innerHTML = me.hand.map(c => {
+          if (state.isIronHand) {
+            return `
+              <div class="my-truco-card blind-iron-hand ${stateCls}" data-my-card="${c.uid}" role="button" tabindex="0" aria-label="Carta virada (mão de ferro)">
+                <span style="font-size:24px;">⚔️</span>
+                <span style="font-size:9px; font-weight:900;">FERRO</span>
+              </div>
+            `;
+          }
+          return `
+            <div class="my-truco-card ${isCardManilha(c) ? 'is-manilha' : ''} ${stateCls}" data-my-card="${c.uid}" role="button" tabindex="0" aria-label="Jogar ${c.code}${c.sym}">
+              ${renderCardFace(c, '', false)}
+            </div>
+          `;
+        }).join('');
+
+        // Botão TRUCO / SEIS / NOVE / DOZE
+        const trucoBtn = document.getElementById('btn-call-truco');
+        const nextStake = getNextStakeValue(state.handStake);
+        const canRaise = isMyTurn && !state.isElevenHand && !state.isIronHand && nextStake !== null && state.lastTrucoTeam !== me.team;
+        trucoBtn.disabled = !canRaise;
+        trucoBtn.textContent = nextStake ? `🔥 ${getStakeCallWord(nextStake)}` : '🔥 MÁXIMO (12)';
+        trucoBtn.title = canRaise ? 'Pedir para a mão valer mais'
+          : (state.isElevenHand || state.isIronHand ? 'Não pode pedir truco na mão de 11/ferro'
+          : (state.lastTrucoTeam === me.team ? 'Seu time já pediu: agora só o rival pode aumentar' : 'Só na sua vez'));
+
+        // Botão Jogar Coberta (disponível a partir da 2ª vaza)
+        const blindBtn = document.getElementById('btn-toggle-blind');
+        blindBtn.disabled = !isMyTurn || state.vazaResults.length === 0 || state.isIronHand;
+        blindBtn.style.borderColor = state.blindNextPlay ? 'var(--brass-accent)' : 'rgba(146,64,14,0.28)';
+        blindBtn.textContent = state.blindNextPlay ? '🙈 Coberta: SIM' : '🙈 Coberta';
+      }
+
+      function flashNotYourTurn() {
+        const banner = document.getElementById('turn-banner');
+        let msg = '✋ Calma! Ainda não é sua vez.';
+        if (state.pendingStake !== null) msg = '✋ Espere a resposta do truco.';
+        else if (state.elevenDecisionPending) msg = '✋ Espere a decisão da mão de 11.';
+        else if (state.resolving) msg = '✋ Conferindo quem levou a vaza...';
+        banner.textContent = msg;
+        banner.classList.remove('turn-banner-flash');
+        void banner.offsetWidth;
+        banner.classList.add('turn-banner-flash');
+        clearTimeout(flashNotYourTurn._t);
+        flashNotYourTurn._t = setTimeout(() => { if (state.inMatch) renderArenaUI(); }, 1400);
+      }
+
+      function tryPlayLocalCard(uid) {
+        if (!isLocalTurn()) {
+          flashNotYourTurn();
+          return;
+        }
+        if (state.isHost) playCardOnTable(state.localId, uid, state.blindNextPlay);
+        else sendRoomPacket({ type: 'TRUCO_PLAY', cardUid: uid, blind: state.blindNextPlay });
+      }
+
+      /* -----------------------------------------------------------------------
+         11. TOQUE OU ARRASTE PARA CIMA PARA JOGAR A CARTA NA MESA
+         ----------------------------------------------------------------------- */
+      function setupMyHandInteractions() {
+        const handRow = document.getElementById('local-hand-row');
+        let dragCardEl = null;
+        let dragUid = null;
+        let pId = null;
+        let startY = 0;
+        let startX = 0;
+        let moved = false;
+
+        handRow.addEventListener('pointerdown', (e) => {
+          const cardEl = e.target.closest('.my-truco-card');
+          if (!cardEl || pId !== null) return;
+
+          dragCardEl = cardEl;
+          dragUid = Number(cardEl.dataset.myCard);
+          pId = e.pointerId;
+          startX = e.clientX;
+          startY = e.clientY;
+          moved = false;
+          try { handRow.setPointerCapture(pId); } catch (_) {}
+        });
+
+        handRow.addEventListener('pointermove', (e) => {
+          if (e.pointerId !== pId || !dragCardEl) return;
+          const dx = e.clientX - startX;
+          const dy = e.clientY - startY;
+          if (!moved && Math.hypot(dx, dy) > 10) moved = true;
+          if (moved) {
+            dragCardEl.style.transform = `translate(${dx * 0.45}px, ${Math.max(-90, Math.min(12, dy))}px) scale(1.07)`;
+          }
+        });
+
+        handRow.addEventListener('pointerup', (e) => {
+          if (e.pointerId !== pId || !dragCardEl) return;
+          try { if (handRow.hasPointerCapture(pId)) handRow.releasePointerCapture(pId); } catch (_) {}
+
+          const dy = e.clientY - startY;
+          const uid = dragUid;
+          const wasMoved = moved;
+
+          dragCardEl.style.transform = '';
+          dragCardEl = null;
+          dragUid = null;
+          pId = null;
+
+          // Toque simples ou arrastar para cima joga a carta; arrastar para o lado cancela
+          if (!wasMoved || dy < -45) tryPlayLocalCard(uid);
+        });
+
+        handRow.addEventListener('pointercancel', () => {
+          if (dragCardEl) dragCardEl.style.transform = '';
+          dragCardEl = null;
+          dragUid = null;
+          pId = null;
+        });
+
+        // Teclado: Enter ou Espaço na carta focada
+        handRow.addEventListener('keydown', (e) => {
+          if (e.key !== 'Enter' && e.key !== ' ') return;
+          const cardEl = e.target.closest('.my-truco-card');
+          if (!cardEl) return;
+          e.preventDefault();
+          tryPlayLocalCard(Number(cardEl.dataset.myCard));
+        });
+      }
+
+      /* -----------------------------------------------------------------------
+         12. SALAS ONLINE P2P (BROADCASTCHANNEL + PEERJS LAZY + QR CODE)
+         ----------------------------------------------------------------------- */
+      let bc = null;
+      let peer = null;
+      let peerConns = [];
+      let peerScriptLoading = false;
+
+      function makeCode() {
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        let out = '';
+        for (let i = 0; i < 4; i++) out += chars[Math.floor(Math.random() * chars.length)];
+        return out;
+      }
+
+      function renderNativeQR(code) {
+        const slot = document.getElementById('room-qr-svg');
+        if (!slot) return;
+        let seed = 0;
+        for (let i = 0; i < code.length; i++) seed = (seed * 31 + code.charCodeAt(i)) >>> 0;
+        const n = 17;
+        const rects = [];
+        const finder = (r, c) => (r < 5 && c < 5) || (r < 5 && c >= n - 5) || (r >= n - 5 && c < 5);
+
+        for (let r = 0; r < n; r++) {
+          for (let c = 0; c < n; c++) {
+            let dark = false;
+            if (finder(r, c)) {
+              const lr = r >= n - 5 ? r - (n - 5) : r;
+              const lc = c >= n - 5 ? c - (n - 5) : c;
+              dark = lr === 0 || lr === 4 || lc === 0 || lc === 4 || (lr === 2 && lc === 2);
+            } else {
+              seed = (seed * 1664525 + 1013904223) >>> 0;
+              dark = ((seed >>> 24) & 1) === 1;
+            }
+            if (dark) rects.push(`<rect x="${c * 6}" y="${r * 6}" width="6" height="6" fill="#291408"/>`);
+          }
+        }
+        slot.innerHTML = `<svg width="96" height="96" viewBox="0 0 ${n * 6} ${n * 6}" xmlns="http://www.w3.org/2000/svg">${rects.join('')}</svg>`;
+      }
+
+      function setupPeerNode(code, joining) {
+        if (typeof window.Peer === 'undefined') return;
+        try {
+          if (peer) { try { peer.destroy(); } catch (_) {} peer = null; peerConns = []; }
+          const id = joining ? undefined : `truco-raiz-${code}`;
+          peer = new window.Peer(id, { debug: 0 });
+          peer.on('open', () => {
+            if (joining) {
+              const conn = peer.connect(`truco-raiz-${code}`);
+              wirePeerConn(conn);
+            }
+          });
+          peer.on('connection', (conn) => wirePeerConn(conn));
+        } catch (_) {}
+      }
+
+      function ensurePeerJS(code, joining) {
+        if (typeof window.Peer !== 'undefined') {
+          setupPeerNode(code, joining);
+          return;
+        }
+        if (peerScriptLoading) return;
+        peerScriptLoading = true;
+        try {
+          const s = document.createElement('script');
+          s.src = 'https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js';
+          s.async = true;
+          s.onload = () => setupPeerNode(state.roomCode, !state.isHost);
+          s.onerror = () => {};
+          document.body.appendChild(s);
+        } catch (_) {}
+      }
+
+      function wirePeerConn(conn) {
+        peerConns.push(conn);
+        conn.on('open', () => broadcastProfileToRoom());
+        conn.on('data', (d) => onRoomPacket(d));
+        conn.on('close', () => {
+          peerConns = peerConns.filter(c => c !== conn);
+        });
+      }
+
+      function sendRoomPacket(payload) {
+        const pkt = { ...payload, senderId: state.localId, room: state.roomCode };
+        if (bc) { try { bc.postMessage(pkt); } catch (_) {} }
+        peerConns.forEach(c => { if (c.open) { try { c.send(pkt); } catch (_) {} } });
+      }
+
+      function broadcastProfileToRoom() {
+        state.roomMembers[state.localId] = {
+          id: state.localId,
+          name: profile.name,
+          avatarId: profile.avatarId,
+          photoDataUrl: profile.photoDataUrl,
+          isHost: state.isHost
+        };
+        refreshRoomRosterUI();
+        sendRoomPacket({ type: 'MEMBER_HELLO', member: state.roomMembers[state.localId] });
+      }
+
+      function syncMatchToPeers() {
+        if (!state.isHost) return;
+        sendRoomPacket({
+          type: 'TRUCO_SYNC',
+          inMatch: state.inMatch,
+          variant: state.variant,
+          scoreUs: state.scoreUs,
+          scoreThem: state.scoreThem,
+          players: state.players,
+          turnIndex: state.turnIndex,
+          viraCard: state.viraCard,
+          manilhaRankCode: state.manilhaRankCode,
+          handStake: state.handStake,
+          vazaResults: state.vazaResults,
+          currentVazaPlays: state.currentVazaPlays,
+          pendingStake: state.pendingStake,
+          lastTrucoTeam: state.lastTrucoTeam,
+          isElevenHand: state.isElevenHand,
+          isIronHand: state.isIronHand,
+          elevenDecisionPending: state.elevenDecisionPending,
+          resolving: state.resolving,
+          vazaHighlightUid: state.vazaHighlightUid,
+          tableMessage: state.tableMessage
+        });
+      }
+
+      function initRoom(code, joining = false) {
+        if (bc) { try { bc.close(); } catch (_) {} bc = null; }
+        if (peer) { try { peer.destroy(); } catch (_) {} peer = null; peerConns = []; }
+
+        state.roomCode = code.toUpperCase();
+        state.isHost = !joining;
+        state.roomMembers = {};
+
+        document.getElementById('room-code-display').textContent = state.roomCode;
+        renderNativeQR(state.roomCode);
+
+        // Não grava ?room= na barra de endereço: ao recarregar a página o jogador
+        // virava "convidado" de uma sala fantasma e os bots nunca jogavam.
+        try {
+          const u = new URL(window.location.href);
+          if (u.searchParams.has('room')) {
+            u.searchParams.delete('room');
+            window.history.replaceState({}, '', u.toString());
+          }
+        } catch (_) {}
+
+        if ('BroadcastChannel' in window) {
+          try {
+            bc = new BroadcastChannel('truco_raiz_' + state.roomCode);
+            bc.onmessage = (e) => onRoomPacket(e.data);
+          } catch (_) {}
+        }
+
+        broadcastProfileToRoom();
+        if (joining) ensurePeerJS(state.roomCode, true);
+      }
+
+      function onRoomPacket(msg) {
+        if (!msg || !msg.type || msg.senderId === state.localId) return;
+
+        if (msg.type === 'MEMBER_HELLO' && msg.member) {
+          const isNew = !state.roomMembers[msg.member.id];
+          state.roomMembers[msg.member.id] = msg.member;
+          refreshRoomRosterUI();
+          if (isNew) {
+            showFloatingTauntSticker(msg.member.name, { emoji: '🤠', text: 'Chegou na roda de Truco!' });
+            sendRoomPacket({ type: 'MEMBER_HELLO', member: state.roomMembers[state.localId] });
+          }
+        } else if (msg.type === 'STICKER_TAUNT' && msg.sticker) {
+          // Só aceita stickers do catálogo (nada de HTML arbitrário vindo da rede)
+          const st = TAUNT_STICKERS.find(x => x.id === msg.sticker.id);
+          if (st) showFloatingTauntSticker(msg.senderName || 'Rival', st);
+        } else if (msg.type === 'TRUCO_PLAY' && state.isHost) {
+          playCardOnTable(msg.senderId, Number(msg.cardUid), !!msg.blind);
+        } else if (msg.type === 'TRUCO_RAISE' && state.isHost) {
+          callTrucoRaise(msg.senderId);
+        } else if (msg.type === 'TRUCO_ANSWER' && state.isHost) {
+          const responder = state.players.find(p => p.id === msg.senderId);
+          const caller = state.pendingTrucoCaller;
+          if (responder && caller && responder.team !== caller.team && ['accept', 'raise', 'fold'].includes(msg.decision)) {
+            resolveTrucoResponse(msg.decision, responder.id);
+          }
+        } else if (msg.type === 'TRUCO_CALLED' && !state.isHost) {
+          triggerTrucoExplosionSticker(msg.callerName || 'Rival', msg.nextVal);
+          if (msg.targetId === state.localId) {
+            state.pendingStake = msg.nextVal;
+            openTrucoResponsePrompt({ name: msg.callerName || 'Rival' }, msg.nextVal);
+          }
+        } else if (msg.type === 'TRUCO_SYNC' && !state.isHost) {
+          const wasInMatch = state.inMatch;
+          state.inMatch = msg.inMatch;
+          state.variant = msg.variant;
+          state.scoreUs = msg.scoreUs;
+          state.scoreThem = msg.scoreThem;
+          state.players = msg.players || [];
+          state.turnIndex = msg.turnIndex;
+          state.viraCard = msg.viraCard;
+          state.manilhaRankCode = msg.manilhaRankCode;
+          state.handStake = msg.handStake;
+          state.vazaResults = msg.vazaResults || [];
+          state.currentVazaPlays = msg.currentVazaPlays || [];
+          state.pendingStake = msg.pendingStake ?? null;
+          state.lastTrucoTeam = msg.lastTrucoTeam ?? null;
+          state.isElevenHand = !!msg.isElevenHand;
+          state.isIronHand = !!msg.isIronHand;
+          state.elevenDecisionPending = !!msg.elevenDecisionPending;
+          state.resolving = !!msg.resolving;
+          state.vazaHighlightUid = msg.vazaHighlightUid ?? null;
+          state.tableMessage = msg.tableMessage ?? null;
+          if (state.pendingStake === null) document.getElementById('truco-response-overlay').classList.add('hidden');
+          if (state.inMatch) document.getElementById('modal-match-end').classList.add('hidden');
+          // Líder saiu da partida antes de alguém fazer 12: convidado volta ao lobby
+          if (!state.inMatch && state.scoreUs < 12 && state.scoreThem < 12) {
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('lobby-screen').classList.remove('hidden');
+            return;
+          }
+          document.getElementById('lobby-screen').classList.add('hidden');
+          document.getElementById('game-screen').classList.remove('hidden');
+          renderArenaUI();
+          if (wasInMatch && !state.inMatch && (state.scoreUs >= 12 || state.scoreThem >= 12)) {
+            const winner = state.scoreUs >= 12 ? 'us' : 'them';
+            showMatchEnd(winner === getMyTeam(), true);
+          }
+        }
+      }
+
+      function refreshRoomRosterUI() {
+        const members = Object.values(state.roomMembers);
+        const countEl = document.getElementById('room-members-count');
+        const listEl = document.getElementById('room-members-list');
+        if (countEl) countEl.textContent = `${members.length} conectado${members.length > 1 ? 's' : ''}`;
+        if (!listEl) return;
+
+        listEl.innerHTML = members.map(m => `
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:5px 8px; border-radius:10px; background:rgba(255,255,255,0.35);">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div class="avatar-ring" style="width:28px; height:28px; font-size:14px; border-width:1.5px;">
+                ${renderAvatarHTML(m.avatarId, m.photoDataUrl)}
+              </div>
+              <span style="font-size:12px; font-weight:900;">${esc(m.name)}</span>
+            </div>
+            <span style="font-size:10px; font-weight:900; color:${m.isHost ? 'var(--brass-accent)' : '#15803d'};">${m.isHost ? '👑 Líder' : 'Pronto'}</span>
+          </div>
+        `).join('');
+      }
+
+      /* -----------------------------------------------------------------------
+         13. NAVEGAÇÃO DO LOBBY, STICKER DRAWER & EVENTOS
+         ----------------------------------------------------------------------- */
+      function buildStickerDrawer() {
+        const drawer = document.getElementById('sticker-drawer');
+        drawer.innerHTML = TAUNT_STICKERS.map(st => `
+          <button type="button" data-send-sticker="${st.id}" class="sticker-pick-btn">
+            <span style="font-size:20px; line-height:1;">${st.emoji}</span>
+            <span>${st.text}</span>
+          </button>
+        `).join('');
+      }
+
+      function switchTab(tabKey) {
+        state.activeTab = tabKey;
+        document.querySelectorAll('[data-tab]').forEach(btn => {
+          const active = btn.dataset.tab === tabKey;
+          btn.style.background = active ? 'var(--brass-accent)' : 'transparent';
+          btn.style.color = active ? '#ffffff' : 'var(--text-main)';
+        });
+
+        ['play', 'profile', 'room'].forEach(k => {
+          const panel = document.getElementById(`panel-${k}`);
+          if (panel) {
+            if (k === tabKey) panel.classList.remove('hidden');
+            else panel.classList.add('hidden');
+          }
+        });
+
+        if (tabKey === 'room') ensurePeerJS(state.roomCode, !state.isHost);
+      }
+
+      function buildAvatarPicker() {
+        const grid = document.getElementById('avatar-picker-grid');
+        grid.innerHTML = AVATARS.map(av => `
+          <button type="button" data-avatar="${av.id}" class="soft-pill choice-btn">
+            <div style="font-size:21px; line-height:1;">${av.emoji}</div>
+            <div style="font-size:9px; font-weight:900; margin-top:4px;">${av.label}</div>
+          </button>
+        `).join('');
+      }
+
+      function refreshProfileUI() {
+        const ringHtml = renderAvatarHTML(profile.avatarId, profile.photoDataUrl);
+        document.getElementById('lobby-avatar-ring').innerHTML = ringHtml;
+        document.getElementById('profile-preview-ring').innerHTML = ringHtml;
+        document.getElementById('lobby-player-name').textContent = profile.name;
+        document.getElementById('lobby-wins-badge').textContent = `🏆 ${profile.wins} queda${profile.wins === 1 ? '' : 's'}`;
+
+        const clearBtn = document.getElementById('btn-clear-photo');
+        if (profile.photoDataUrl) clearBtn.classList.remove('hidden');
+        else clearBtn.classList.add('hidden');
+
+        document.querySelectorAll('[data-avatar]').forEach(btn => {
+          const active = !profile.photoDataUrl && btn.dataset.avatar === profile.avatarId;
+          btn.style.borderColor = active ? 'var(--brass-accent)' : 'rgba(146,64,14,0.28)';
+        });
+      }
+
+      function refreshMatchSettingsUI() {
+        const modeTxt = state.gameMode === '1v1' ? '🤠 Solo 1v1' : (state.gameMode === '3v3' ? '🔥 Trio 3v3' : '🤝 Dupla 2v2');
+        const varTxt = state.variant === 'paulista' ? 'Truco Paulista' : 'Truco Mineiro';
+        const diffTxt = state.botDiff === 'easy' ? 'Fácil' : (state.botDiff === 'hard' ? 'Mestre' : 'Médio');
+        document.getElementById('lobby-match-summary').textContent = `${modeTxt} · ${varTxt} · Bots ${diffTxt}`;
+
+        document.querySelectorAll('[data-mode]').forEach(b => {
+          b.style.borderColor = b.dataset.mode === state.gameMode ? 'var(--brass-accent)' : 'rgba(146,64,14,0.28)';
+        });
+        document.querySelectorAll('[data-variant]').forEach(b => {
+          b.style.borderColor = b.dataset.variant === state.variant ? 'var(--brass-accent)' : 'rgba(146,64,14,0.28)';
+        });
+        document.querySelectorAll('[data-diff]').forEach(b => {
+          b.style.borderColor = b.dataset.diff === state.botDiff ? 'var(--brass-accent)' : 'rgba(146,64,14,0.28)';
+        });
+      }
+
+      const nameInput = document.getElementById('input-profile-name');
+      nameInput.value = profile.name;
+      nameInput.addEventListener('input', () => {
+        profile.name = nameInput.value.trim() || 'Violeiro';
+        saveProfile();
+      });
+
+      document.getElementById('input-photo-file').addEventListener('change', async (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const compressed = await compressImageFile(file);
+        if (compressed) {
+          profile.photoDataUrl = compressed;
+          saveProfile();
+          showFloatingTauntSticker(profile.name, { emoji: '📷', text: 'Foto atualizada!' });
+        }
+      });
+
+      document.body.addEventListener('click', (e) => {
+        const btn = e.target.closest('button');
+        if (!btn) {
+          const drawer = document.getElementById('sticker-drawer');
+          if (drawer && !drawer.classList.contains('hidden') && !e.target.closest('#sticker-drawer')) {
+            drawer.classList.add('hidden');
+          }
+          return;
+        }
+
+        if (btn.dataset.tab) { sfx.init(); switchTab(btn.dataset.tab); return; }
+        if (btn.dataset.mode) { sfx.init(); state.gameMode = btn.dataset.mode; refreshMatchSettingsUI(); return; }
+        if (btn.dataset.variant) { sfx.init(); state.variant = btn.dataset.variant; refreshMatchSettingsUI(); return; }
+        if (btn.dataset.diff) { sfx.init(); state.botDiff = btn.dataset.diff; refreshMatchSettingsUI(); return; }
+        if (btn.dataset.setTheme) {
+          sfx.init();
+          applyTheme(btn.dataset.setTheme);
+          saveProfile();
+          return;
+        }
+        if (btn.dataset.avatar) {
+          sfx.init();
+          profile.avatarId = btn.dataset.avatar;
+          profile.photoDataUrl = null;
+          saveProfile();
+          return;
+        }
+        if (btn.dataset.sendSticker) {
+          const st = TAUNT_STICKERS.find(x => x.id === btn.dataset.sendSticker);
+          document.getElementById('sticker-drawer').classList.add('hidden');
+          if (st) {
+            showFloatingTauntSticker(profile.name, st);
+            sendRoomPacket({ type: 'STICKER_TAUNT', senderName: profile.name, sticker: st });
+            maybeBotReplyWithTaunt();
+          }
+          return;
+        }
+
+        switch (btn.id) {
+          case 'btn-cycle-theme':
+          case 'btn-game-theme': {
+            sfx.init();
+            const idx = THEMES.findIndex(t => t.id === profile.theme);
+            const next = THEMES[(idx + 1) % THEMES.length];
+            applyTheme(next.id);
+            saveProfile();
+            showFloatingTauntSticker('TEMA', { emoji: '🎨', text: next.label });
+            break;
+          }
+          case 'btn-mute':
+          case 'btn-game-mute': {
+            sfx.enabled = !sfx.enabled;
+            profile.muted = !sfx.enabled;
+            refreshMuteIcons();
+            saveProfile();
+            break;
+          }
+          case 'btn-help':
+          case 'btn-game-help':
+          case 'btn-howto':
+            document.getElementById('modal-rules').classList.remove('hidden');
+            break;
+          case 'btn-eleven-play':
+            resolveElevenDecision('play');
+            break;
+          case 'btn-eleven-run':
+            resolveElevenDecision('run');
+            break;
+          case 'btn-close-rules':
+          case 'btn-ok-rules':
+            document.getElementById('modal-rules').classList.add('hidden');
+            break;
+          case 'btn-edit-profile-shortcut':
+            switchTab(state.activeTab === 'profile' ? 'play' : 'profile');
+            break;
+          case 'btn-clear-photo':
+            profile.photoDataUrl = null;
+            saveProfile();
+            break;
+          case 'btn-toggle-qr':
+            document.getElementById('room-qr-box').classList.toggle('hidden');
+            break;
+          case 'btn-share-link': {
+            ensurePeerJS(state.roomCode, false);
+            const url = `${window.location.origin}${window.location.pathname}?room=${state.roomCode}`;
+            if (navigator.share) {
+              navigator.share({ title: 'Truco Raiz & Arena', url }).catch(() => {});
+            } else {
+              const tmp = document.createElement('input');
+              tmp.value = url;
+              document.body.appendChild(tmp);
+              tmp.select();
+              document.execCommand('copy');
+              document.body.removeChild(tmp);
+              const lbl = document.getElementById('share-link-lbl');
+              lbl.textContent = 'Copiado!';
+              setTimeout(() => { lbl.textContent = '🔗 Chamar'; }, 1800);
+            }
+            break;
+          }
+          case 'btn-room-join': {
+            const inp = document.getElementById('input-room-join');
+            const c = inp.value.trim().toUpperCase();
+            if (c.length >= 3) {
+              initRoom(c, true);
+              inp.value = '';
+            }
+            break;
+          }
+          case 'btn-start-match':
+          case 'btn-play-again':
+            startMatch();
+            break;
+          case 'btn-call-truco':
+            if (state.isHost) callTrucoRaise(state.localId);
+            else sendRoomPacket({ type: 'TRUCO_RAISE' });
+            break;
+          case 'btn-toggle-blind':
+            state.blindNextPlay = !state.blindNextPlay;
+            renderArenaUI();
+            break;
+          case 'btn-open-stickers':
+            sfx.init();
+            document.getElementById('sticker-drawer').classList.toggle('hidden');
+            break;
+          case 'btn-resp-accept':
+            resolveTrucoResponse('accept');
+            break;
+          case 'btn-resp-raise':
+            resolveTrucoResponse('raise');
+            break;
+          case 'btn-resp-fold':
+            resolveTrucoResponse('fold');
+            break;
+          case 'btn-game-exit':
+            // Evita sair sem querer no meio da partida: pede um segundo toque
+            if (state.inMatch && !btn.dataset.armed) {
+              btn.dataset.armed = '1';
+              btn.textContent = 'Sair?';
+              btn.style.background = 'rgba(185,28,28,0.9)';
+              setTimeout(() => {
+                delete btn.dataset.armed;
+                btn.textContent = '✕';
+                btn.style.background = '';
+              }, 2500);
+              break;
+            }
+            delete btn.dataset.armed;
+            btn.textContent = '✕';
+            btn.style.background = '';
+            goToLobby();
+            break;
+          case 'btn-end-lobby':
+            goToLobby();
+            break;
+        }
+      });
+
+      /* -----------------------------------------------------------------------
+         14. INICIALIZAÇÃO IMEDIATA
+         ----------------------------------------------------------------------- */
+      function goToLobby() {
+        clearTimeout(stepTimer);
+        state.inMatch = false;
+        state.pendingStake = null;
+        state.pendingTrucoCaller = null;
+        state.elevenDecisionPending = false;
+        state.resolving = false;
+        ['modal-match-end', 'truco-response-overlay', 'eleven-overlay', 'game-screen'].forEach(id => {
+          document.getElementById(id).classList.add('hidden');
+        });
+        document.getElementById('sticker-drawer').classList.add('hidden');
+        document.getElementById('lobby-screen').classList.remove('hidden');
+        syncMatchToPeers();
+      }
+
+      function refreshMuteIcons() {
+        const icon = sfx.enabled ? '🔊' : '🔇';
+        ['btn-mute', 'btn-game-mute'].forEach(id => {
+          const b = document.getElementById(id);
+          b.textContent = icon;
+          b.title = sfx.enabled ? 'Desligar som' : 'Ligar som';
+        });
+      }
+
+      // Esc fecha janelas abertas (regras, gaveta de stickers)
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Escape') return;
+        document.getElementById('modal-rules').classList.add('hidden');
+        document.getElementById('sticker-drawer').classList.add('hidden');
+      });
+
+      sfx.enabled = !profile.muted;
+      refreshMuteIcons();
+      setupMyHandInteractions();
+      buildStickerDrawer();
+      applyTheme(profile.theme);
+      buildAvatarPicker();
+      refreshProfileUI();
+      refreshMatchSettingsUI();
+      switchTab('play');
+
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const roomParam = params.get('room');
+        if (roomParam && roomParam.trim().length >= 3) {
+          initRoom(roomParam.trim(), true);
+        } else {
+          initRoom(makeCode(), false);
+        }
+      } catch (_) {
+        initRoom(makeCode(), false);
+      }
+
+      // Primeira visita: abre o "como jogar" automaticamente
+      try {
+        if (!localStorage.getItem('truco_raiz_seen_rules')) {
+          document.getElementById('modal-rules').classList.remove('hidden');
+          localStorage.setItem('truco_raiz_seen_rules', '1');
+        }
+      } catch (_) {}
+    });
+  </script>
+</body>
+</html>
