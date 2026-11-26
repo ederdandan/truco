@@ -1,5 +1,5 @@
 // Service worker do Truco Raiz: rede primeiro, cache como reserva (funciona offline).
-const CACHE = 'truco-raiz-v2';
+const CACHE = 'truco-raiz-v3';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon.svg', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (e) => {
